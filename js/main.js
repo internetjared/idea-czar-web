@@ -255,9 +255,9 @@
         '<button type="button" class="ic-filter-pill" data-cat="' + cat.toLowerCase() + '">' +
           '<span class="ic-filter-text">' + cat + '</span>' +
           '<span class="ic-filter-icon" aria-hidden="true">' +
-            '<svg viewBox="0 0 12 12" width="12" height="12" fill="none">' +
-              '<path d="M6 1V11" stroke="currentColor" stroke-linecap="round"/>' +
-              '<path d="M11 6L1 6" stroke="currentColor" stroke-linecap="round"/>' +
+            '<svg viewBox="0 0 12 12" width="13" height="13" fill="none">' +
+              '<path d="M6 1V11" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>' +
+              '<path d="M11 6L1 6" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>' +
             '</svg>' +
           '</span>' +
         '</button>';

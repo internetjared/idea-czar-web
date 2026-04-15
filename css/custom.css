@@ -370,3 +370,193 @@ section[data-section-id="69a1e248a45af16353a9dffd"] #block-yui_3_17_2_1_17722166
   text-underline-offset: 0.12em !important;
   text-decoration-skip-ink: none !important;
 }
+
+
+/* ============================================================
+   12. PORTFOLIO FILTER — WORK PAGE
+   Section:    69a1d4ceddb6a504135dda80
+   Collection: 69a1d4c9ddb6a504135dda24 (Work)
+
+   Style match: https://wearetopsecret.com/our-work/
+     - Vertical pill list on the left
+     - "FILTER" label above
+     - White pills with 1px border + small "+" icon
+     - Active: dark filled pill, white text, + rotates to ×
+     - Multi-select (click to toggle)
+     - Mobile: stacks above grid as horizontal scrolling row
+
+   Categories are read from each project's DESCRIPTION field,
+   expected format:  CATEGORIES: Content, B2B
+   (the JS hides that line on individual project pages)
+   ============================================================ */
+
+/* Make .content a flex container so filter sits left, grid sits right */
+section[data-section-id="69a1d4ceddb6a504135dda80"] > .content-wrapper > .content {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 24px !important;
+}
+
+/* Grid keeps its own behavior but takes remaining width */
+section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+/* Reduce the grid's default left padding since the filter is now taking space */
+section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
+  padding-left: 12px !important;
+}
+
+/* ---------------- Filter sidebar ---------------- */
+.ic-portfolio-filter {
+  flex: 0 0 180px;
+  padding: 152px 0 40px 60px;   /* top matches grid top padding */
+  position: sticky;
+  top: 100px;
+  box-sizing: border-box;
+}
+
+.ic-filter-label {
+  font-family: 'Fyodor', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #201D20;
+  margin-bottom: 14px;
+}
+
+.ic-filter-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* ---------------- Filter pill ---------------- */
+.ic-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px 7px 17px;
+  border: 1px solid #201D20;
+  border-radius: 30px;
+  background: transparent;
+  color: #201D20;
+  font-family: 'Fyodor', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.ic-filter-pill:hover {
+  background-color: rgba(32, 29, 32, 0.06);
+}
+
+.ic-filter-pill.is-active {
+  background-color: #201D20;
+  color: #ffffff;
+}
+
+.ic-filter-icon {
+  display: inline-flex;
+  width: 10px;
+  height: 10px;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.ic-filter-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ic-filter-pill.is-active .ic-filter-icon {
+  transform: rotate(45deg); /* + → × */
+}
+
+/* Clear-all link, shown only when a filter is active */
+.ic-filter-clear {
+  margin-top: 14px;
+  display: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font-family: 'Fyodor', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #201D20;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  opacity: 0.7;
+}
+.ic-filter-clear:hover { opacity: 1; }
+.ic-portfolio-filter.has-active .ic-filter-clear { display: inline-block; }
+
+/* ---------------- Grid item fade + filtered-out state ---------------- */
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item {
+  transition: opacity 0.25s ease;
+}
+
+section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay.ic-filtering .grid-item {
+  opacity: 0;
+  pointer-events: none;
+}
+
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item.ic-hidden {
+  display: none !important;
+}
+
+/* Empty-state message (injected by JS when no items match) */
+.ic-filter-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  font-family: 'Fyodor', sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(32, 29, 32, 0.5);
+}
+
+/* Hide the "CATEGORIES: ..." line on individual project pages
+   (the JS also removes it as a safety net, but CSS here prevents flash) */
+.ic-hidden-meta { display: none !important; }
+
+/* ---------------- Mobile: stack above grid ---------------- */
+@media screen and (max-width: 767px) {
+  section[data-section-id="69a1d4ceddb6a504135dda80"] > .content-wrapper > .content {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .ic-portfolio-filter {
+    flex: 0 0 auto;
+    position: static;
+    width: 100%;
+    padding: 24px 20px 0 20px;
+  }
+  .ic-filter-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
+    padding-left: 0 !important;
+  }
+}
+
+/* Guard edit mode: don't break Squarespace's own drag/edit overlays */
+body.sqs-is-page-editing .ic-portfolio-filter { display: none !important; }
+body.sqs-is-page-editing section[data-section-id="69a1d4ceddb6a504135dda80"] > .content-wrapper > .content {
+  display: block !important;
+}

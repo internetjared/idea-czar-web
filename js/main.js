@@ -211,7 +211,181 @@
 
 
 /* ============================================================
-   3. CLIENTS GALLERY — SCROLL-TRIGGERED STAGGER ANIMATION
+   3. PORTFOLIO FILTER — WORK PAGE
+   Section: 69a1d4ceddb6a504135dda80
+
+   Reads each project's description from the Squarespace JSON
+   API (/work?format=json) and looks for a line formatted as:
+       CATEGORIES: Content, B2B
+   That line is then hidden on individual project pages.
+
+   Builds a vertical pill-list filter sidebar matching the
+   Top Secret agency design. Multi-select, OR logic (show items
+   matching any active filter). Smooth fade on filter change.
+   ============================================================ */
+
+(function () {
+  var SECTION_ID  = '69a1d4ceddb6a504135dda80';
+  var COLLECTION  = '/work';
+  var CATEGORIES  = ['Content', 'B2B', 'Comedy'];
+
+  /* --- 1. Hide "CATEGORIES: ..." text on individual project pages --- */
+  function hideCategoriesMeta() {
+    var candidates = document.querySelectorAll(
+      '.sqs-block-content p, .sqs-block-content h1, .sqs-block-content h2, ' +
+      '.sqs-block-content h3, .sqs-block-content h4, .sqs-block-content li, ' +
+      '.BlogItem-body p, .ProductItem p'
+    );
+    candidates.forEach(function (el) {
+      var txt = (el.textContent || '').trim();
+      if (/^CATEGORIES?\s*:/i.test(txt) && txt.length < 200) {
+        el.classList.add('ic-hidden-meta');
+      }
+    });
+  }
+
+  /* --- 2. Filter-sidebar builder --- */
+  function buildFilterUI() {
+    var wrap = document.createElement('aside');
+    wrap.className = 'ic-portfolio-filter';
+
+    var html = '<div class="ic-filter-label">Filter</div><div class="ic-filter-list">';
+    CATEGORIES.forEach(function (cat) {
+      html +=
+        '<button type="button" class="ic-filter-pill" data-cat="' + cat.toLowerCase() + '">' +
+          '<span class="ic-filter-text">' + cat + '</span>' +
+          '<span class="ic-filter-icon" aria-hidden="true">' +
+            '<svg viewBox="0 0 12 12" width="12" height="12" fill="none">' +
+              '<path d="M6 1V11" stroke="currentColor" stroke-linecap="round"/>' +
+              '<path d="M11 6L1 6" stroke="currentColor" stroke-linecap="round"/>' +
+            '</svg>' +
+          '</span>' +
+        '</button>';
+    });
+    html += '</div>';
+    html += '<button type="button" class="ic-filter-clear">Clear all</button>';
+    wrap.innerHTML = html;
+    return wrap;
+  }
+
+  /* --- 3. Parse a project body for the CATEGORIES line --- */
+  function parseCategories(body) {
+    if (!body) return [];
+    /* Strip HTML then scan for the line */
+    var text = body.replace(/<[^>]+>/g, ' ');
+    var m = text.match(/CATEGORIES?\s*:\s*([^\n\r]+?)(?=<|$|\.)/i);
+    if (!m) return [];
+    return m[1].split(',').map(function (c) {
+      return c.trim().toLowerCase();
+    }).filter(Boolean);
+  }
+
+  /* --- 4. Main init --- */
+  function initPortfolioFilter() {
+    hideCategoriesMeta();   /* always runs — may be on a project page */
+
+    if (document.body.classList.contains('sqs-is-page-editing')) return;
+
+    var section = document.querySelector('[data-section-id="' + SECTION_ID + '"]');
+    if (!section || section.dataset.icFilterInit === 'true') return;
+    section.dataset.icFilterInit = 'true';
+
+    var grid = section.querySelector('.portfolio-grid-overlay');
+    if (!grid) return;
+
+    /* Insert filter sidebar as first child of the grid's parent (.content) */
+    var filter = buildFilterUI();
+    grid.parentElement.insertBefore(filter, grid);
+
+    var pills = filter.querySelectorAll('.ic-filter-pill');
+    var clearBtn = filter.querySelector('.ic-filter-clear');
+
+    /* Fetch project metadata (cache-busted) */
+    fetch(COLLECTION + '?format=json&v=' + Date.now(), { credentials: 'include' })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var map = {};
+        (data.items || []).forEach(function (item) {
+          map[item.fullUrl] = parseCategories(item.body || '');
+        });
+
+        /* Tag each grid item with its categories */
+        grid.querySelectorAll('.grid-item').forEach(function (a) {
+          var href = a.getAttribute('href');
+          var cats = map[href] || [];
+          a.dataset.icCats = cats.join('|');
+        });
+      })
+      .catch(function () { /* silent — filter still renders, items untagged */ });
+
+    /* --- 5. Filter click handler --- */
+    function applyFilter() {
+      var active = Array.prototype.filter.call(pills, function (p) {
+        return p.classList.contains('is-active');
+      }).map(function (p) { return p.dataset.cat; });
+
+      filter.classList.toggle('has-active', active.length > 0);
+
+      var items = grid.querySelectorAll('.grid-item');
+      var anyVisible = false;
+
+      /* Fade out, then filter, then fade back in */
+      grid.classList.add('ic-filtering');
+
+      setTimeout(function () {
+        items.forEach(function (item) {
+          var cats = (item.dataset.icCats || '').split('|').filter(Boolean);
+          var show = active.length === 0 ||
+                     active.some(function (a) { return cats.indexOf(a) !== -1; });
+          item.classList.toggle('ic-hidden', !show);
+          if (show) anyVisible = true;
+        });
+
+        /* Empty-state message */
+        var empty = grid.querySelector('.ic-filter-empty');
+        if (!anyVisible && active.length > 0) {
+          if (!empty) {
+            empty = document.createElement('div');
+            empty.className = 'ic-filter-empty';
+            empty.textContent = 'No projects match the selected filters.';
+            grid.appendChild(empty);
+          }
+        } else if (empty) {
+          empty.remove();
+        }
+
+        grid.classList.remove('ic-filtering');
+      }, 220);
+    }
+
+    filter.addEventListener('click', function (e) {
+      var pill = e.target.closest('.ic-filter-pill');
+      if (pill) {
+        e.preventDefault();
+        pill.classList.toggle('is-active');
+        applyFilter();
+        return;
+      }
+      if (e.target.closest('.ic-filter-clear')) {
+        e.preventDefault();
+        pills.forEach(function (p) { p.classList.remove('is-active'); });
+        applyFilter();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPortfolioFilter);
+  } else {
+    initPortfolioFilter();
+  }
+  /* Re-run after Squarespace Mercury Ajax page transitions */
+  window.addEventListener('mercury:load', initPortfolioFilter);
+})();
+
+
+/* ============================================================
+   4. CLIENTS GALLERY — SCROLL-TRIGGERED STAGGER ANIMATION
    Section: 69a1f75a05bc7061b5e415c7
 
    Each client logo fades up individually as the section scrolls

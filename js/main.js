@@ -227,7 +227,7 @@
 (function () {
   var SECTION_ID  = '69a1d4ceddb6a504135dda80';
   var COLLECTION  = '/work';
-  var CATEGORIES  = ['Content', 'B2B', 'Comedy', 'Copy'];
+  var CATEGORIES  = ['Copy', 'Content', 'B2B', 'Comedy'];
 
   /* --- 1. Hide "CATEGORIES: ..." text on individual project pages --- */
   function hideCategoriesMeta() {

@@ -561,3 +561,101 @@ body.sqs-is-page-editing .ic-portfolio-filter { display: none !important; }
 body.sqs-is-page-editing section[data-section-id="69a1d4ceddb6a504135dda80"] > .content-wrapper > .content {
   display: block !important;
 }
+
+
+/* ============================================================
+   13. WORK PAGE — CARD HOVER (matches Home page Featured Work)
+   Section: 69a1d4ceddb6a504135dda80
+
+   Replicates the hover treatment used on the Home page Featured
+   Work list (section 9 above): colored overlay fades in with a
+   5px black border, card lifts with shadow, centered white title.
+   Odd items = green overlay, even items = gold overlay.
+   Mobile: no lift/shadow, native Squarespace title behavior.
+   ============================================================ */
+
+/* Card lift + shadow on the image (not the title beneath) */
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item {
+  transition: opacity 0.25s ease, transform 0.3s ease !important;
+}
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:hover {
+  transform: translateY(-3px) scale(1.01) !important;
+}
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-image {
+  position: relative !important;
+  overflow: hidden !important;
+  transition: box-shadow 0.3s ease !important;
+}
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:hover .grid-image {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12),
+              0 4px 10px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Squarespace's native .portfolio-overlay div becomes our hover overlay */
+section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  opacity: 0 !important;
+  transition: opacity 0.35s ease, border-color 0.35s ease !important;
+  pointer-events: none !important;
+  border: 5px solid transparent !important;
+  box-sizing: border-box !important;
+  z-index: 2 !important;
+}
+
+/* Alternating colors — green odd, gold even (match Featured Work) */
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:nth-child(odd) .portfolio-overlay {
+  background-color: rgba(51, 102, 83, 0.92) !important;
+}
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:nth-child(even) .portfolio-overlay {
+  background-color: rgba(235, 153, 27, 0.92) !important;
+}
+
+/* Reveal overlay on hover with black border */
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:hover .portfolio-overlay {
+  opacity: 1 !important;
+  border-color: #000 !important;
+}
+
+/* Override Squarespace's native fade-in title behavior — we control it here */
+section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-text {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 28px !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.35s ease !important;
+}
+section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-title {
+  color: #ffffff !important;
+  font-size: 26px !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  margin: 0 !important;
+  /* Kill Squarespace's built-in delayed transition */
+  transition: none !important;
+  transition-delay: 0s !important;
+  transition-duration: 0s !important;
+  opacity: 1 !important;
+}
+section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:hover .portfolio-text {
+  opacity: 1 !important;
+}
+
+/* Mobile — drop the overlay/lift, let native Squarespace behavior return */
+@media screen and (max-width: 767px) {
+  section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:hover {
+    transform: none !important;
+  }
+  section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:hover .grid-image {
+    box-shadow: none !important;
+  }
+  section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-overlay,
+  section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-text {
+    display: none !important;
+  }
+}

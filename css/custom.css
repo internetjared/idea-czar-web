@@ -1,0 +1,82 @@
+/* ============================================================
+   IDEA CZAR — SQUARESPACE CUSTOM STYLES
+   Hosted via Cloudflare Pages, loaded in Squarespace header injection.
+
+   To update: edit this file → push to GitHub → Cloudflare deploys
+   automatically → changes live on site within ~60 seconds.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. KEN IMAGE / SECTION DIVIDER FIX
+   Section: 69a1e248a45af16353a9dffd
+
+   Pushes Ken's photo up so it sits flush with the diagonal
+   section divider. A beige triangle on .section-divider-block
+   (z-index 999) masks the part of the image that would otherwise
+   bleed above the divider line. Triangle angle matches the
+   SVG clip-path polygon exactly.
+   ---------------------------------------------------------- */
+
+section[data-section-id="69a1e248a45af16353a9dffd"] .fe-block-yui_3_17_2_1_1772216668345_1327 {
+  transform: translateY(6vw) !important;
+}
+
+section[data-section-id="69a1e248a45af16353a9dffd"] .section-divider-block {
+  background-color: rgb(246, 243, 238) !important;
+  clip-path: polygon(0 0, 100% 100%, 0 100%) !important;
+}
+
+@media screen and (max-width: 767px) {
+  section[data-section-id="69a1e248a45af16353a9dffd"] .fe-block-yui_3_17_2_1_1772216668345_1327 {
+    transform: none !important;
+  }
+  section[data-section-id="69a1e248a45af16353a9dffd"] .section-divider-block {
+    background-color: transparent !important;
+    clip-path: none !important;
+  }
+}
+
+
+/* ----------------------------------------------------------
+   2. GLOBAL ORANGE SQUARE — SUB-HEADLINE ACCENT
+   Adds a 10×10px orange (#e8962f) square before bold sub-headline
+   paragraphs site-wide.
+
+   Targets:  p > [color-span] > strong   (branded taglines)
+             p.sqsrte-small > strong      (small bold labels)
+
+   Does NOT match "Get a Quote" — its <strong> is inside <a>,
+   not a color span, so it's excluded by design.
+   ---------------------------------------------------------- */
+
+.sqs-block-html p:has(> [class*="sqsrte-text-color"] > strong)::before,
+.sqs-block-html p.sqsrte-small:has(> strong)::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  background-color: #e8962f !important;
+  margin-right: 10px !important;
+  vertical-align: middle !important;
+  position: relative !important;
+  top: -1px !important;
+}
+
+
+/* ----------------------------------------------------------
+   3. LIST-SECTION TITLE GOLD UNDERLINE
+   Replicates the gold SVG underline used on "Clients" (via
+   Squarespace Text Shape, color #F5A724) on the "Featured Work"
+   and "Services" section titles, which are <p> tags inside
+   .user-items-list-section and don't support Text Shape natively.
+   ---------------------------------------------------------- */
+
+.user-items-list-section .list-section-title,
+.user-items-list-section .list-section-title p {
+  text-decoration: underline !important;
+  text-decoration-color: #F5A724 !important;
+  text-decoration-thickness: 0.1em !important;
+  text-underline-offset: 0.12em !important;
+  text-decoration-skip-ink: none !important;
+}

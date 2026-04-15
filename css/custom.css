@@ -418,7 +418,7 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
    → padding-top = 135 - 100 = 35
 -------------------------------------------------- */
 .ic-portfolio-filter {
-  flex: 0 0 220px;                /* wider to accommodate "Brand Guidelines" */
+  flex: 0 0 240px;                /* wider to accommodate "Brand Guidelines" */
   padding: 35px 0 40px 60px;
   position: sticky;
   top: 100px;
@@ -459,10 +459,15 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   line-height: 1;
+  white-space: nowrap;            /* keep "Brand Guidelines" on one line */
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   appearance: none;
   -webkit-appearance: none;
+}
+
+.ic-filter-text {
+  white-space: nowrap;
 }
 
 .ic-filter-pill:hover {

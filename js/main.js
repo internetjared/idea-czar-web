@@ -306,7 +306,10 @@
       .then(function (data) {
         var map = {};
         (data.items || []).forEach(function (item) {
-          map[item.fullUrl] = parseCategories(item.body || '');
+          /* Check BOTH body and excerpt — user can put CATEGORIES: line in either */
+          var fromBody    = parseCategories(item.body || '');
+          var fromExcerpt = parseCategories(item.excerpt || '');
+          map[item.fullUrl] = fromBody.length ? fromBody : fromExcerpt;
         });
 
         /* Tag each grid item with its categories */

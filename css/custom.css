@@ -75,17 +75,44 @@ h4,
 
 
 /* ----------------------------------------------------------
-   3. ACTIVE NAV UNDERLINE
-   Faint dotted underline on the active nav item (dots courtesy
-   of a 3×3px repeating gradient).
+   3. NAV UNDERLINE — active + hover
+   Active nav item: solid gold underline (#F5A724, brand gold).
+   Non-active items: on hover, the same gold underline animates
+   in from left to right. Hover underline is disabled on the
+   active item (it already has one).
    ---------------------------------------------------------- */
 
+/* Active state — solid gold line */
 body:not(.header--menu-open) .header-nav-item--active > a:not(.header-nav-folder-title) {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: repeat-x;
-  background-size: 3px 3px !important;
-  background-position: 0 100%;
-  background-position: 0 calc(100% - 0.1em);
+  background-image: linear-gradient(#F5A724, #F5A724) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 2px !important;
+  background-position: 0 calc(100% - 0.1em) !important;
+}
+
+/* Position context for the animated hover underline */
+.header-nav-item > a:not(.header-nav-folder-title) {
+  position: relative;
+}
+
+/* Non-active nav links: animated gold underline on hover */
+.header-nav-item:not(.header-nav-item--active) > a:not(.header-nav-folder-title)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.05em;
+  height: 2px;
+  background-color: #F5A724;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+  pointer-events: none;
+}
+
+.header-nav-item:not(.header-nav-item--active) > a:not(.header-nav-folder-title):hover::after,
+.header-nav-item:not(.header-nav-item--active) > a:not(.header-nav-folder-title):focus-visible::after {
+  transform: scaleX(1);
 }
 
 

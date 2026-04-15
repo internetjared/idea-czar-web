@@ -390,11 +390,18 @@ section[data-section-id="69a1e248a45af16353a9dffd"] #block-yui_3_17_2_1_17722166
    (the JS hides that line on individual project pages)
    ============================================================ */
 
+/* Keep the work section full-viewport-tall even when filters hide
+   most/all cards — prevents the page background from showing through */
+section[data-section-id="69a1d4ceddb6a504135dda80"] {
+  min-height: 100vh !important;
+}
+
 /* Make .content a flex container so filter sits left, grid sits right */
 section[data-section-id="69a1d4ceddb6a504135dda80"] > .content-wrapper > .content {
   display: flex !important;
   align-items: flex-start !important;
   gap: 24px !important;
+  min-height: calc(100vh - 160px);    /* breathing room for header + section padding */
 }
 
 /* Grid keeps its own behavior but takes remaining width */

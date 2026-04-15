@@ -379,19 +379,36 @@
       }, 220);
     }
 
+    /* Prevent pills from stealing focus on click (stops the browser
+       from scroll-adjusting the page around the newly-focused button) */
+    filter.addEventListener('mousedown', function (e) {
+      if (e.target.closest('.ic-filter-pill, .ic-filter-clear')) {
+        e.preventDefault();
+      }
+    });
+
     filter.addEventListener('click', function (e) {
       var pill = e.target.closest('.ic-filter-pill');
-      if (pill) {
-        e.preventDefault();
+      var isPill  = !!pill;
+      var isClear = !!e.target.closest('.ic-filter-clear');
+      if (!isPill && !isClear) return;
+
+      e.preventDefault();
+
+      /* Snapshot scroll; restore after click + after any microtask */
+      var preservedY = window.scrollY;
+
+      if (isPill) {
         pill.classList.toggle('is-active');
-        applyFilter();
-        return;
-      }
-      if (e.target.closest('.ic-filter-clear')) {
-        e.preventDefault();
+      } else {
         pills.forEach(function (p) { p.classList.remove('is-active'); });
-        applyFilter();
       }
+      applyFilter();
+
+      /* Belt + suspenders: if anything else shifts scroll, snap back */
+      requestAnimationFrame(function () {
+        if (window.scrollY !== preservedY) window.scrollTo(0, preservedY);
+      });
     });
   }
 

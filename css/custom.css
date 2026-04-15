@@ -86,8 +86,8 @@ h4,
 body:not(.header--menu-open) .header-nav-item--active > a:not(.header-nav-folder-title) {
   background-image: linear-gradient(#F5A724, #F5A724) !important;
   background-repeat: no-repeat !important;
-  background-size: 100% 2px !important;
-  background-position: 0 calc(100% - 0.1em) !important;
+  background-size: 100% 3px !important;
+  background-position: 0 calc(100% - 0.05em) !important;
 }
 
 /* Position context for the animated hover underline */
@@ -101,8 +101,8 @@ body:not(.header--menu-open) .header-nav-item--active > a:not(.header-nav-folder
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0.05em;
-  height: 2px;
+  bottom: 0;
+  height: 3px;
   background-color: #F5A724;
   transform: scaleX(0);
   transform-origin: left center;

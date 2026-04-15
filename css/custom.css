@@ -4,51 +4,332 @@
 
    To update: edit this file → push to GitHub → Cloudflare deploys
    automatically → changes live on site within ~60 seconds.
+
+   Table of contents:
+     1.  Custom fonts (Propaganda, Molot, Fyodor)
+     2.  Headings & nav typography
+     3.  Active nav underline
+     4.  Featured Work list — hover overlay (section 69a1ab39...)
+     5.  Featured Work list — card hover lift & shadow
+     6.  Featured Work list — padding adjustment
+     7.  Hero — "Get a Quote" text & vertical divider
+     8.  About — Ken image flush with section divider
+     9.  Global orange square — bold sub-headline accent
+    10.  Primary button border color
+    11.  List-section title gold underline
    ============================================================ */
 
 
 /* ----------------------------------------------------------
-   1. KEN IMAGE / SECTION DIVIDER FIX
-   Section: 69a1e248a45af16353a9dffd
-
-   Pushes Ken's photo up so it sits flush with the diagonal
-   section divider. A beige triangle on .section-divider-block
-   (z-index 999) masks the part of the image that would otherwise
-   bleed above the divider line. Triangle angle matches the
-   SVG clip-path polygon exactly.
+   1. CUSTOM FONTS
    ---------------------------------------------------------- */
 
-section[data-section-id="69a1e248a45af16353a9dffd"] .fe-block-yui_3_17_2_1_1772216668345_1327 {
-  transform: translateY(6vw) !important;
+@font-face {
+  font-family: 'Propaganda';
+  src: url('https://static1.squarespace.com/static/69a1a889960bd65e0c70be09/t/69baa128fb1b2c01de89a28f/1773838632045/propaganda.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-section[data-section-id="69a1e248a45af16353a9dffd"] .section-divider-block {
-  background-color: rgb(246, 243, 238) !important;
-  clip-path: polygon(0 0, 100% 100%, 0 100%) !important;
+@font-face {
+  font-family: 'Molot';
+  src: url('https://static1.squarespace.com/static/69a1a889960bd65e0c70be09/t/69d3e801acb9fd688f13d044/1775495169829/Molot.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-@media screen and (max-width: 767px) {
-  section[data-section-id="69a1e248a45af16353a9dffd"] .fe-block-yui_3_17_2_1_1772216668345_1327 {
-    transform: none !important;
+@font-face {
+  font-family: 'Fyodor';
+  src: url('https://static1.squarespace.com/static/69a1a889960bd65e0c70be09/t/69baa23976194c4acbcf7fbf/1773838905486/Fyodor-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* ----------------------------------------------------------
+   2. HEADINGS & NAV TYPOGRAPHY
+   ---------------------------------------------------------- */
+
+/* All headings use Molot, uppercase, slight tracking */
+h1, h2, h3 {
+  font-family: 'Molot', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Nav links, primary buttons, h4, list-section titles, and
+   the "Get a Quote" block use Fyodor bold uppercase */
+nav a,
+.header-nav-item a,
+.sqs-button-element--primary,
+h4,
+.list-section-title,
+#block-5477d88409637e58f501 {
+  font-family: 'Fyodor', sans-serif !important;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+
+/* ----------------------------------------------------------
+   3. ACTIVE NAV UNDERLINE
+   Faint dotted underline on the active nav item (dots courtesy
+   of a 3×3px repeating gradient).
+   ---------------------------------------------------------- */
+
+body:not(.header--menu-open) .header-nav-item--active > a:not(.header-nav-folder-title) {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: repeat-x;
+  background-size: 3px 3px !important;
+  background-position: 0 100%;
+  background-position: 0 calc(100% - 0.1em);
+}
+
+
+/* ============================================================
+   4. FEATURED WORK LIST — HOVER OVERLAY
+   Section: 69a1ab39e4a48e5f71c38db3
+
+   Desktop: hover reveals a full-image overlay with title and
+   description, alternating green/gold backgrounds.
+   Mobile: overlay disabled, description shows inline.
+   ============================================================ */
+
+/* Hide original native button wrapper */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item-content__button-wrapper {
+  display: none !important;
+}
+
+/* Hide original description on desktop (shown inside overlay instead) */
+@media screen and (min-width: 768px) {
+  section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item-content__description {
+    display: none !important;
   }
-  section[data-section-id="69a1e248a45af16353a9dffd"] .section-divider-block {
-    background-color: transparent !important;
-    clip-path: none !important;
+}
+
+/* Fade out the title underneath the image on hover */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item-content__title {
+  transition: opacity 0.3s ease !important;
+}
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:hover .list-item-content__title {
+  opacity: 0 !important;
+}
+
+/* Media container acts as positioning context */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item-media-inner {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 0px !important;
+}
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item-media-inner img {
+  border-radius: 0px !important;
+}
+
+/* The overlay itself (injected by JS) */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .hover-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 28px !important;
+  box-sizing: border-box !important;
+  opacity: 0 !important;
+  transition: opacity 0.35s ease !important;
+  z-index: 2 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:hover .hover-overlay {
+  opacity: 1 !important;
+  border: 5px solid #000;
+}
+
+/* Overlay typography */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .hover-overlay h2.overlay-title {
+  color: #ffffff !important;
+  font-size: 26px !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  margin: 0 0 14px 0 !important;
+}
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .hover-overlay p {
+  color: #ffffff !important;
+  font-size: 17px !important;
+  line-height: 1.6 !important;
+  text-align: center !important;
+  margin: 0 !important;
+}
+
+/* Alternating overlay colors — green odd, gold even */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:nth-child(odd) .hover-overlay {
+  background-color: rgba(51, 102, 83, 0.92) !important;
+}
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:nth-child(even) .hover-overlay {
+  background-color: rgba(235, 153, 27, 0.92) !important;
+}
+
+/* Title link stays inherited color, no underline */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item-content__title a {
+  color: inherit !important;
+  text-decoration: none !important;
+  background-image: none !important;
+}
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item-content__title a:hover {
+  opacity: 0.7 !important;
+}
+
+/* Pointer cursor over the media area */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item-media {
+  cursor: pointer !important;
+}
+
+/* Mobile — overlay disabled, normal inline description returns */
+@media screen and (max-width: 767px) {
+  section[data-section-id="69a1ab39e4a48e5f71c38db3"] .hover-overlay {
+    display: none !important;
+  }
+  section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:hover .list-item-content__title {
+    opacity: 1 !important;
   }
 }
 
 
 /* ----------------------------------------------------------
-   2. GLOBAL ORANGE SQUARE — SUB-HEADLINE ACCENT
-   Adds a 10×10px orange (#e8962f) square before bold sub-headline
-   paragraphs site-wide.
+   5. FEATURED WORK LIST — CARD HOVER LIFT & SHADOW
+   ---------------------------------------------------------- */
 
-   Targets:  p > [color-span] > strong   (branded taglines)
-             p.sqsrte-small > strong      (small bold labels)
+/* Whole card lifts slightly on hover */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item {
+  transition: transform 0.3s ease !important;
+}
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:hover {
+  transform: translateY(-3px) scale(1.01) !important;
+}
+
+/* Shadow on the image container only (not the text below it) */
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item-media-inner {
+  transition: box-shadow 0.3s ease !important;
+}
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:hover .list-item-media-inner {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12),
+              0 4px 10px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Mobile — no lift or shadow */
+@media screen and (max-width: 767px) {
+  section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:hover {
+    transform: none !important;
+  }
+  section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:hover .list-item-media-inner {
+    box-shadow: none !important;
+  }
+}
+
+
+/* ----------------------------------------------------------
+   6. FEATURED WORK LIST — TOP PADDING
+   Breathing room above the first row of cards.
+   ---------------------------------------------------------- */
+
+section[data-section-id="69a1ab39e4a48e5f71c38db3"] .user-items-list {
+  padding-top: 25px !important;
+}
+
+
+/* ============================================================
+   7. HERO — "GET A QUOTE" TEXT STYLING + VERTICAL DIVIDER
+   Section: 69a1a9057889be6b0aee15b2
+   Block:   #block-5477d88409637e58f501
+
+   Dark text on default, orange on hover, no underline.
+   Subtle orange vertical divider to the left (desktop only).
+   ============================================================ */
+
+section[data-section-id="69a1a9057889be6b0aee15b2"] #block-5477d88409637e58f501 p,
+section[data-section-id="69a1a9057889be6b0aee15b2"] #block-5477d88409637e58f501 p a {
+  color: #201D20 !important;
+  transition: color 0s ease !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  background-image: none !important;
+}
+section[data-section-id="69a1a9057889be6b0aee15b2"] #block-5477d88409637e58f501 p strong,
+section[data-section-id="69a1a9057889be6b0aee15b2"] #block-5477d88409637e58f501 p a strong {
+  color: inherit !important;
+}
+
+/* Hover — orange */
+section[data-section-id="69a1a9057889be6b0aee15b2"] #block-5477d88409637e58f501 p:hover,
+section[data-section-id="69a1a9057889be6b0aee15b2"] #block-5477d88409637e58f501 p:hover a,
+section[data-section-id="69a1a9057889be6b0aee15b2"] #block-5477d88409637e58f501 p:hover strong,
+section[data-section-id="69a1a9057889be6b0aee15b2"] #block-5477d88409637e58f501 p a:hover {
+  color: #e8962f !important;
+  text-decoration: none !important;
+  background-image: none !important;
+}
+
+/* Vertical divider line (desktop) */
+section[data-section-id="69a1a9057889be6b0aee15b2"] .fe-block-5477d88409637e58f501 {
+  position: relative !important;
+}
+section[data-section-id="69a1a9057889be6b0aee15b2"] .fe-block-5477d88409637e58f501::before {
+  content: '' !important;
+  position: absolute !important;
+  left: -16px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 1.5px !important;
+  height: 70% !important;
+  background-color: rgba(232, 150, 47, 0.5) !important;
+}
+@media screen and (max-width: 767px) {
+  section[data-section-id="69a1a9057889be6b0aee15b2"] .fe-block-5477d88409637e58f501::before {
+    display: none !important;
+  }
+}
+
+
+/* ============================================================
+   8. ABOUT — KEN IMAGE FLUSH WITH SECTION DIVIDER
+   Section: 69a1e248a45af16353a9dffd
+   Block:   #block-yui_3_17_2_1_1772216668345_1327
+
+   Pushes Ken's image down 72px and raises z-index so he sits
+   flush with (not behind) the diagonal section divider.
+   Mobile: reset.
+   ============================================================ */
+
+section[data-section-id="69a1e248a45af16353a9dffd"] #block-yui_3_17_2_1_1772216668345_1327 {
+  position: relative !important;
+  top: 72px !important;
+  z-index: 2 !important;
+}
+
+@media screen and (max-width: 767px) {
+  section[data-section-id="69a1e248a45af16353a9dffd"] #block-yui_3_17_2_1_1772216668345_1327 {
+    top: 0 !important;
+  }
+}
+
+
+/* ============================================================
+   9. GLOBAL ORANGE SQUARE — BOLD SUB-HEADLINE ACCENT
+   Adds a 10×10px orange square before any bold sub-headline
+   paragraph site-wide. To use on a new section: write the
+   sub-headline in a text block, bold it, and apply any
+   Squarespace text color (accent, black, etc.).
 
    Does NOT match "Get a Quote" — its <strong> is inside <a>,
    not a color span, so it's excluded by design.
-   ---------------------------------------------------------- */
+   ============================================================ */
 
 .sqs-block-html p:has(> [class*="sqsrte-text-color"] > strong)::before,
 .sqs-block-html p.sqsrte-small:has(> strong)::before {
@@ -65,12 +346,21 @@ section[data-section-id="69a1e248a45af16353a9dffd"] .section-divider-block {
 
 
 /* ----------------------------------------------------------
-   3. LIST-SECTION TITLE GOLD UNDERLINE
+   10. PRIMARY BUTTON BORDER COLOR
+   ---------------------------------------------------------- */
+
+.primary-button-style-solid .sqs-button-element--primary {
+  border-color: #610102;
+}
+
+
+/* ============================================================
+   11. LIST-SECTION TITLE GOLD UNDERLINE
    Replicates the gold SVG underline used on "Clients" (via
    Squarespace Text Shape, color #F5A724) on the "Featured Work"
    and "Services" section titles, which are <p> tags inside
    .user-items-list-section and don't support Text Shape natively.
-   ---------------------------------------------------------- */
+   ============================================================ */
 
 .user-items-list-section .list-section-title,
 .user-items-list-section .list-section-title p {

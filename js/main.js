@@ -4,11 +4,84 @@
 
    To update: edit this file → push to GitHub → Cloudflare deploys
    automatically → changes live on site within ~60 seconds.
+
+   Table of contents:
+     1. Featured Work list — hover overlay injection
+     2. Hero H1 cipher / decode animation
+     3. Clients gallery — scroll-triggered stagger animation
    ============================================================ */
 
 
-/* ----------------------------------------------------------
-   1. CIPHER / DECODE ANIMATION — H1 HERO HEADING
+/* ============================================================
+   1. FEATURED WORK LIST — HOVER OVERLAY INJECTION
+   Section: 69a1ab39e4a48e5f71c38db3
+
+   Injects an <a class="hover-overlay"> into each .list-item-media-inner
+   containing the item's title and description. Also wraps the visible
+   title text in a link and makes the whole media area clickable.
+
+   CSS for the overlay lives in custom.css (section 4).
+   ============================================================ */
+
+(function () {
+  function initListOverlays() {
+    var section = document.querySelector('section[data-section-id="69a1ab39e4a48e5f71c38db3"]');
+    if (!section) return;
+
+    var items = section.querySelectorAll('.list-item');
+    items.forEach(function (item) {
+      if (item.querySelector('.hover-overlay')) return;
+
+      var button    = item.querySelector('.list-item-content__button');
+      var href      = button ? button.getAttribute('href') : '';
+      var titleEl   = item.querySelector('.list-item-content__title');
+      var titleText = titleEl ? titleEl.textContent.trim() : '';
+      var descEl    = item.querySelector('.list-item-content__description');
+      var descHTML  = descEl ? descEl.innerHTML : '';
+
+      /* Build overlay */
+      var overlay = document.createElement('a');
+      overlay.className = 'hover-overlay';
+      if (href) overlay.href = href;
+      overlay.innerHTML = '<h2 class="overlay-title">' + titleText + '</h2>' + descHTML;
+
+      var mediaInner = item.querySelector('.list-item-media-inner');
+      if (mediaInner) mediaInner.appendChild(overlay);
+
+      /* Wrap visible title in a link */
+      if (titleEl && href && !titleEl.querySelector('a')) {
+        var titleLink = document.createElement('a');
+        titleLink.href = href;
+        titleLink.innerHTML = titleEl.innerHTML;
+        titleEl.innerHTML = '';
+        titleEl.appendChild(titleLink);
+      }
+
+      /* Whole media region is clickable */
+      var media = item.querySelector('.list-item-media');
+      if (media && href) {
+        media.addEventListener('click', function (e) {
+          if (!e.target.closest('.hover-overlay')) {
+            window.location.href = href;
+          }
+        });
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initListOverlays);
+  } else {
+    initListOverlays();
+  }
+
+  /* Re-run after Squarespace's Mercury Ajax page transitions */
+  window.addEventListener('mercury:load', initListOverlays);
+})();
+
+
+/* ============================================================
+   2. CIPHER / DECODE ANIMATION — H1 HERO HEADING
    Block: #block-yui_3_17_2_1_1772202127116_2470
 
    On page load, scrambles the H1 text with random glyphs then
@@ -18,10 +91,10 @@
    Tuning:
      holdFrames    — frames of all-scrambled before resolve begins
      resolveFrames — frames over which chars resolve (ease-out)
-     msPerFrame    — ms between animation ticks (33 = ~30fps)
+     msPerFrame    — ms between animation ticks (~30fps)
      glyphs        — character pool for scramble (mixed case to
                      keep average width close to source text)
-   ---------------------------------------------------------- */
+   ============================================================ */
 
 (function () {
   if (document.body.classList.contains('sqs-is-page-editing')) return;
@@ -37,13 +110,13 @@
 
     /* Lock height so scrambled chars don't reflow the layout */
     var rect = h1.getBoundingClientRect();
-    h1.style.height = rect.height + 'px';
-    h1.style.overflow = 'hidden';
+    h1.style.height    = rect.height + 'px';
+    h1.style.overflow  = 'hidden';
     h1.style.wordBreak = 'break-all';
 
     var glyphs = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV';
 
-    /* Collect all text nodes inside h1 */
+    /* Collect text nodes */
     var textNodes = [];
     (function walk(node) {
       if (node.nodeType === 3 && node.textContent.trim().length > 0) {
@@ -53,7 +126,7 @@
       }
     })(h1);
 
-    /* Build per-character array */
+    /* Build per-character state */
     var chars = [];
     textNodes.forEach(function (tn) {
       for (var i = 0; i < tn.original.length; i++) {
@@ -66,12 +139,14 @@
       }
     });
 
-    var holdFrames = 30, resolveFrames = 70, totalFrames = holdFrames + resolveFrames;
+    var holdFrames    = 30;
+    var resolveFrames = 70;
+    var totalFrames   = holdFrames + resolveFrames;
 
-    /* Assign each non-space char a frame at which it resolves (ease-out) */
+    /* Assign each char a frame at which it resolves (ease-out) */
     var nonSpace = chars.filter(function (c) { return !c.resolved; });
     nonSpace.forEach(function (c, i) {
-      var t = i / nonSpace.length;
+      var t     = i / nonSpace.length;
       var eased = 1 - Math.pow(1 - t, 0.35);
       c.resolveAt = Math.floor(holdFrames + (eased * resolveFrames) + (Math.random() * 6 - 2));
     });
@@ -91,7 +166,7 @@
       lastTick = timestamp;
       frame++;
 
-      var allDone = true;
+      var allDone     = true;
       var nodeBuffers = new Map();
 
       chars.forEach(function (c) {
@@ -113,17 +188,17 @@
       nodeBuffers.forEach(function (buf, node) { node.textContent = buf.join(''); });
 
       if (allDone || frame > totalFrames + 10) {
-        /* Restore original text and unlock height */
+        /* Restore exact original text and unlock height */
         textNodes.forEach(function (tn) { tn.node.textContent = tn.original; });
-        h1.style.height = '';
-        h1.style.overflow = '';
+        h1.style.height    = '';
+        h1.style.overflow  = '';
         h1.style.wordBreak = '';
       } else {
         requestAnimationFrame(tick);
       }
     }
 
-    /* 500ms pause before scramble begins (lets the page settle) */
+    /* 500ms pause before scramble begins (lets page settle) */
     setTimeout(function () { requestAnimationFrame(tick); }, 500);
   }
 
@@ -135,8 +210,8 @@
 })();
 
 
-/* ----------------------------------------------------------
-   2. CLIENTS GALLERY — SCROLL-TRIGGERED STAGGER ANIMATION
+/* ============================================================
+   3. CLIENTS GALLERY — SCROLL-TRIGGERED STAGGER ANIMATION
    Section: 69a1f75a05bc7061b5e415c7
 
    Each client logo fades up individually as the section scrolls
@@ -154,7 +229,7 @@
      BOTTOM_MARGIN        — how far below viewport to pre-trigger
                             (higher % = triggers earlier / less blank)
      PER_ROW              — logos per row in the grid
-   ---------------------------------------------------------- */
+   ============================================================ */
 
 (function () {
   if (document.body.classList.contains('sqs-is-page-editing')) return;

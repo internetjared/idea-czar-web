@@ -418,7 +418,7 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
    → padding-top = 135 - 100 = 35
 -------------------------------------------------- */
 .ic-portfolio-filter {
-  flex: 0 0 180px;
+  flex: 0 0 220px;                /* wider to accommodate "Brand Guidelines" */
   padding: 35px 0 40px 60px;
   position: sticky;
   top: 100px;

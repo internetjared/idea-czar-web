@@ -214,37 +214,80 @@
    3. PORTFOLIO FILTER — WORK PAGE
    Section: 69a1d4ceddb6a504135dda80
 
-   Reads each project's description from the Squarespace JSON
-   API (/work?format=json) and looks for a line formatted as:
-       CATEGORIES: Content, B2B
-   That line is then hidden on individual project pages.
+   CLIENT WORKFLOW — how to tag a project:
+     1. Open the project page in Squarespace
+     2. Add a Text Block anywhere on the page
+     3. Type a single line:   CATEGORIES: Copy, Brand Voice
+        Any combo of these (case-insensitive, comma-separated):
+          Brand Voice, Brand Guidelines, Copy, Content, B2B, Fun
+     4. Save
+     → Visitors never see this line: the script auto-hides any block
+       whose text starts with "CATEGORIES:" on the project page.
+     → On /work, the script fetches each project page in the
+       background, reads the line, and tags the card for filtering.
 
-   Builds a vertical pill-list filter sidebar matching the
-   Top Secret agency design. Multi-select, OR logic (show items
-   matching any active filter). Smooth fade on filter change.
+   Perf: each project page is fetched once per session and cached
+   in sessionStorage so repeat visits to /work are instant.
+
+   Filter behavior:
+     - Multi-select, OR logic (show items matching ANY active filter)
+     - Smooth fade on filter change, empty-state message
    ============================================================ */
 
 (function () {
   var SECTION_ID  = '69a1d4ceddb6a504135dda80';
-  var COLLECTION  = '/work';
-  var CATEGORIES  = ['Copy', 'Content', 'B2B', 'Comedy'];
+  var CATEGORIES  = ['Brand Voice', 'Brand Guidelines', 'Copy', 'Content', 'B2B', 'Fun'];
+  var CACHE_TTL_MS = 10 * 60 * 1000;  /* 10 minutes */
 
-  /* --- 1. Hide "CATEGORIES: ..." text on individual project pages --- */
+  /* --- Hide "CATEGORIES: ..." blocks on individual project pages --- */
   function hideCategoriesMeta() {
-    var candidates = document.querySelectorAll(
-      '.sqs-block-content p, .sqs-block-content h1, .sqs-block-content h2, ' +
-      '.sqs-block-content h3, .sqs-block-content h4, .sqs-block-content li, ' +
-      '.BlogItem-body p, .ProductItem p'
-    );
-    candidates.forEach(function (el) {
-      var txt = (el.textContent || '').trim();
+    var blocks = document.querySelectorAll('.sqs-block-content');
+    blocks.forEach(function (bc) {
+      var txt = (bc.textContent || '').trim();
       if (/^CATEGORIES?\s*:/i.test(txt) && txt.length < 200) {
-        el.classList.add('ic-hidden-meta');
+        var block = bc.closest('.sqs-block') || bc;
+        block.classList.add('ic-hidden-meta');
       }
     });
   }
 
-  /* --- 2. Filter-sidebar builder --- */
+  /* --- Parse a string (HTML or text) for the CATEGORIES line --- */
+  function extractCategories(text) {
+    if (!text) return [];
+    var stripped = text.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ');
+    var m = stripped.match(/CATEGORIES?\s*:\s*([^\n\r<]+?)(?:\n|\r|<|$)/i);
+    if (!m) return [];
+    return m[1].split(',').map(function (c) {
+      return c.trim().toLowerCase();
+    }).filter(Boolean);
+  }
+
+  /* --- Fetch project page HTML, cache in sessionStorage --- */
+  function fetchProjectCategories(href) {
+    var cacheKey = 'ic-cats:' + href;
+    try {
+      var cachedRaw = sessionStorage.getItem(cacheKey);
+      if (cachedRaw) {
+        var cached = JSON.parse(cachedRaw);
+        if (cached.exp > Date.now()) return Promise.resolve(cached.cats);
+      }
+    } catch (e) {}
+
+    return fetch(href, { credentials: 'include' })
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var cats = extractCategories(html);
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify({
+            cats: cats, exp: Date.now() + CACHE_TTL_MS
+          }));
+        } catch (e) {}
+        return cats;
+      })
+      .catch(function () { return []; });
+  }
+
+  /* --- Filter-sidebar builder --- */
   function buildFilterUI() {
     var wrap = document.createElement('aside');
     wrap.className = 'ic-portfolio-filter';
@@ -268,21 +311,9 @@
     return wrap;
   }
 
-  /* --- 3. Parse a project body for the CATEGORIES line --- */
-  function parseCategories(body) {
-    if (!body) return [];
-    /* Strip HTML then scan for the line */
-    var text = body.replace(/<[^>]+>/g, ' ');
-    var m = text.match(/CATEGORIES?\s*:\s*([^\n\r]+?)(?=<|$|\.)/i);
-    if (!m) return [];
-    return m[1].split(',').map(function (c) {
-      return c.trim().toLowerCase();
-    }).filter(Boolean);
-  }
-
-  /* --- 4. Main init --- */
+  /* --- Main init --- */
   function initPortfolioFilter() {
-    hideCategoriesMeta();   /* always runs — may be on a project page */
+    hideCategoriesMeta();   /* run everywhere — hides the line on project pages */
 
     if (document.body.classList.contains('sqs-is-page-editing')) return;
 
@@ -298,28 +329,15 @@
     grid.parentElement.insertBefore(filter, grid);
 
     var pills = filter.querySelectorAll('.ic-filter-pill');
-    var clearBtn = filter.querySelector('.ic-filter-clear');
 
-    /* Fetch project metadata (cache-busted) */
-    fetch(COLLECTION + '?format=json&v=' + Date.now(), { credentials: 'include' })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        var map = {};
-        (data.items || []).forEach(function (item) {
-          /* Check BOTH body and excerpt — user can put CATEGORIES: line in either */
-          var fromBody    = parseCategories(item.body || '');
-          var fromExcerpt = parseCategories(item.excerpt || '');
-          map[item.fullUrl] = fromBody.length ? fromBody : fromExcerpt;
-        });
-
-        /* Tag each grid item with its categories */
-        grid.querySelectorAll('.grid-item').forEach(function (a) {
-          var href = a.getAttribute('href');
-          var cats = map[href] || [];
-          a.dataset.icCats = cats.join('|');
-        });
-      })
-      .catch(function () { /* silent — filter still renders, items untagged */ });
+    /* Fetch each project page in parallel, parse CATEGORIES, tag grid items */
+    var slides = Array.prototype.slice.call(grid.querySelectorAll('.grid-item'));
+    Promise.all(slides.map(function (link) {
+      var href = link.getAttribute('href') || '';
+      return fetchProjectCategories(href).then(function (cats) {
+        link.dataset.icCats = cats.join('|');
+      });
+    }));
 
     /* --- 5. Filter click handler --- */
     function applyFilter() {

@@ -408,13 +408,22 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
   padding-left: 12px !important;
 }
 
-/* ---------------- Filter sidebar ---------------- */
+/* ---------------- Filter sidebar ----------------
+   padding-top is calibrated so the "FILTER" label
+   sits flush with the top of the first card:
+     grid's top padding    ≈ 48px
+     sticky-top offset     = 100px
+     content-wrapper top   ≈  88px (below fixed header)
+   → label should appear at y ≈ 135 (first card top)
+   → padding-top = 135 - 100 = 35
+-------------------------------------------------- */
 .ic-portfolio-filter {
   flex: 0 0 180px;
-  padding: 152px 0 40px 60px;   /* top matches grid top padding */
+  padding: 35px 0 40px 60px;
   position: sticky;
   top: 100px;
   box-sizing: border-box;
+  align-self: flex-start;
 }
 
 .ic-filter-label {

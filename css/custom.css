@@ -612,6 +612,35 @@ body.sqs-is-page-editing section[data-section-id="69a1d4ceddb6a504135dda80"] > .
 
 
 /* ============================================================
+   CONTACT FORM — white fields, black type
+   Block: #block-yui_3_17_2_1_1775494432162_2715
+
+   Overrides SquareKicker's default black-tint field background
+   and inherited color. Uses #siteWrapper prefix to match the
+   specificity of SquareKicker's inline style block.
+   ============================================================ */
+
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field input,
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field textarea,
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 0 !important;
+}
+
+/* Placeholder text — slightly muted black so the distinction
+   from filled text is still visible */
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field input::placeholder,
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field textarea::placeholder {
+  color: rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+}
+
+/* Field label / title text sitting above each input stays
+   branded (keeps whatever color the form section theme applies) */
+
+
+/* ============================================================
    13. WORK PAGE — CARD HOVER (matches Home page Featured Work)
    Section: 69a1d4ceddb6a504135dda80
 

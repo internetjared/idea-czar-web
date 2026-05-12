@@ -60,17 +60,23 @@ h1, h2, h3 {
   letter-spacing: 0.05em;
 }
 
-/* Nav links, primary buttons, h4, list-section titles, and
-   the "Get a Quote" block use Fyodor bold uppercase */
+/* Nav links, primary buttons, h4, list-section titles, project
+   pagination titles, and the "Get a Quote" block use Fyodor
+   bold uppercase. The .item-pagination-title is an h2 by default
+   so we override the h1/h2/h3 Molot rule above by listing it
+   explicitly here (later rule wins on equal specificity). */
 nav a,
 .header-nav-item a,
 .sqs-button-element--primary,
 h4,
 .list-section-title,
+.item-pagination-title,
+h2.item-pagination-title,
 #block-5477d88409637e58f501 {
   font-family: 'Fyodor', sans-serif !important;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: normal !important;
 }
 
 

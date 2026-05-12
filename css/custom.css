@@ -121,6 +121,33 @@ body:not(.header--menu-open) .header-nav-item--active > a:not(.header-nav-folder
   transform: scaleX(1);
 }
 
+/* Same animated gold underline on portfolio project pagination
+   titles (Previous / Next links at the bottom of a project page).
+   Structure: a.item-pagination-link > div > h2.item-pagination-title */
+.item-pagination-title {
+  position: relative;
+  display: inline-block;      /* hug the text so underline only spans the title */
+}
+
+.item-pagination-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background-color: #F5A724;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+  pointer-events: none;
+}
+
+.item-pagination-link:hover .item-pagination-title::after,
+.item-pagination-link:focus-visible .item-pagination-title::after {
+  transform: scaleX(1);
+}
+
 
 /* ============================================================
    4. FEATURED WORK LIST — HOVER OVERLAY

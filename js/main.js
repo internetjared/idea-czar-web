@@ -243,6 +243,10 @@
   var SECTION_ID  = '69a1d4ceddb6a504135dda80';
   var CATEGORIES  = ['Brand Voice', 'Brand Guidelines', 'Copy', 'Content', 'B2B', 'Fun'];
   var CACHE_TTL_MS = 10 * 60 * 1000;  /* 10 minutes */
+  var CACHE_VERSION = 2;  /* bump whenever extractMeta() changes — old
+                             entries with a lower version are ignored
+                             and refetched, so users never get stuck on
+                             cached output from a buggy parser */
 
   /* --- Hide "CATEGORIES:" or "TAGLINE:" lines on project pages ---
      Walks LEAF content elements (p, h1-h6, li) and hides each one
@@ -296,7 +300,7 @@
 
   /* --- Fetch project page HTML, cache parsed meta in sessionStorage --- */
   function fetchProjectMeta(href) {
-    var cacheKey = 'ic-meta:' + href;
+    var cacheKey = 'ic-meta:v' + CACHE_VERSION + ':' + href;
     try {
       var cachedRaw = sessionStorage.getItem(cacheKey);
       if (cachedRaw) {
@@ -318,6 +322,22 @@
       })
       .catch(function () { return { cats: [], tagline: '' }; });
   }
+
+  /* Sweep out any old cache keys from previous versions so we don't
+     leak storage. Safe to call repeatedly. */
+  (function purgeOldCache() {
+    try {
+      var keep = 'ic-meta:v' + CACHE_VERSION + ':';
+      for (var i = sessionStorage.length - 1; i >= 0; i--) {
+        var k = sessionStorage.key(i);
+        if (!k) continue;
+        if ((k.indexOf('ic-meta:') === 0 || k.indexOf('ic-cats:') === 0) &&
+            k.indexOf(keep) !== 0) {
+          sessionStorage.removeItem(k);
+        }
+      }
+    } catch (e) {}
+  })();
 
   /* --- Filter-sidebar builder --- */
   function buildFilterUI() {

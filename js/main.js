@@ -244,36 +244,41 @@
   var CATEGORIES  = ['Brand Voice', 'Brand Guidelines', 'Copy', 'Content', 'B2B', 'Fun'];
   var CACHE_TTL_MS = 10 * 60 * 1000;  /* 10 minutes */
 
-  /* --- Hide "CATEGORIES:" or "TAGLINE:" blocks on project pages --- */
+  /* --- Hide "CATEGORIES:" or "TAGLINE:" lines on project pages ---
+     Walks LEAF content elements (p, h1-h6, li) and hides each one
+     individually that matches. Hiding the whole .sqs-block-content
+     would over-hide when the user put the meta lines inside a text
+     block that also contains other intentional content. */
   function hideCategoriesMeta() {
-    var blocks = document.querySelectorAll('.sqs-block-content');
-    blocks.forEach(function (bc) {
-      var txt = (bc.textContent || '').trim();
-      if (/^(CATEGORIES?|TAGLINE)\s*:/i.test(txt) && txt.length < 400) {
-        var block = bc.closest('.sqs-block') || bc;
-        block.classList.add('ic-hidden-meta');
+    document.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6').forEach(function (el) {
+      var txt = (el.textContent || '').trim();
+      if (!txt || txt.length > 400) return;
+      if (/^(CATEGORIES?|TAGLINE)\s*:/i.test(txt)) {
+        el.classList.add('ic-hidden-meta');
       }
     });
   }
 
-  /* --- Parse a project page's HTML for CATEGORIES + TAGLINE --- */
+  /* --- Parse a project page's HTML for CATEGORIES + TAGLINE ---
+     Important: only walk LEAF content elements (p, h1-h6, li), never
+     <div>. A parent div's textContent concatenates ALL descendant
+     paragraphs into one string, which makes the CATEGORIES line
+     greedily swallow the following TAGLINE line. */
   function extractMeta(html) {
     var meta = { cats: [], tagline: '' };
     if (!html) return meta;
 
-    /* Parse the page into a real DOM so we can iterate true paragraph
-       breaks (replacing <p>…</p> blindly with \n is fragile). */
     var doc;
     try {
       doc = new DOMParser().parseFromString(html, 'text/html');
     } catch (e) { return meta; }
 
-    var nodes = doc.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, div');
+    var nodes = doc.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6');
     for (var i = 0; i < nodes.length; i++) {
       var txt = (nodes[i].textContent || '').trim();
       if (!txt || txt.length > 400) continue;
 
-      var catMatch = txt.match(/^CATEGORIES?\s*:\s*(.+)$/i);
+      var catMatch = txt.match(/^CATEGORIES?\s*:\s*(.+?)\s*$/i);
       if (catMatch && !meta.cats.length) {
         meta.cats = catMatch[1].split(',').map(function (c) {
           return c.trim().toLowerCase();
@@ -281,7 +286,7 @@
         continue;
       }
 
-      var tagMatch = txt.match(/^TAGLINE\s*:\s*(.+)$/i);
+      var tagMatch = txt.match(/^TAGLINE\s*:\s*(.+?)\s*$/i);
       if (tagMatch && !meta.tagline) {
         meta.tagline = tagMatch[1].trim();
       }

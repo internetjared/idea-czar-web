@@ -123,9 +123,20 @@
       var rect = h1.getBoundingClientRect();
       h1.style.height    = rect.height + 'px';
       h1.style.overflow  = 'hidden';
-      h1.style.wordBreak = 'break-all';
+      /* NOTE: deliberately NOT setting word-break: break-all here.
+         Mid-word breaking during scramble produces different line
+         wrapping than the natural word-based wrap, so words shift
+         lines at the end of the animation. Instead we keep natural
+         word wrapping and constrain character widths below. */
 
-    var glyphs = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV';
+      /* Build the scramble glyph pool from the H1's OWN characters
+         so each scrambled letter has roughly the same render width
+         as a real character at that position. This is what stops
+         scrambled words from wrapping differently than the original. */
+      var sourceChars = (h1.textContent || '').replace(/\s+/g, '');
+      var glyphs = sourceChars.length >= 6
+        ? sourceChars + sourceChars.toLowerCase()
+        : 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV';
 
     /* Collect text nodes */
     var textNodes = [];

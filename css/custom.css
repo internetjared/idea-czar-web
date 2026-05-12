@@ -423,22 +423,26 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] {
   min-height: 100vh !important;
 }
 
-/* Make .content a flex container so filter sits left, grid sits right */
+/* Make .content a flex container so filter sits left, grid sits right.
+   Cap and center it so on wide viewports the filter stays anchored
+   right next to the grid instead of drifting to the viewport edge. */
 section[data-section-id="69a1d4ceddb6a504135dda80"] > .content-wrapper > .content {
   display: flex !important;
   align-items: flex-start !important;
   gap: 24px !important;
+  max-width: 1700px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
   min-height: calc(100vh - 160px);    /* breathing room for header + section padding */
 }
 
-/* Grid keeps its own behavior but takes remaining width */
+/* Grid takes the remaining width inside the capped flex container.
+   max-width: none unblocks Squarespace's internal constraint so the
+   grid actually fills the space left over after the filter. */
 section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
   flex: 1 1 auto !important;
   min-width: 0 !important;
-}
-
-/* Reduce the grid's default left padding since the filter is now taking space */
-section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
+  max-width: none !important;
   padding-left: 12px !important;
 }
 

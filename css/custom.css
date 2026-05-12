@@ -616,6 +616,58 @@ body.sqs-is-page-editing section[data-section-id="69a1d4ceddb6a504135dda80"] > .
 
 
 /* ============================================================
+   LIST-SECTION BUTTON — match the "See the work" CTA exactly
+   Section: 69a1e3b70627ef1961c0ec2b   ("View Services" button)
+   Reference: #block-yui_3_17_2_1_1772202649113_937 (the CTA)
+
+   Squarespace styles the list-section-button as secondary-large
+   by default (red outline, Almarai 12px). The CTA is primary-medium
+   (gold fill, black border, Fyodor 16px). We force every visible
+   property on the target to match the CTA.
+   ============================================================ */
+
+section[data-section-id="69a1e3b70627ef1961c0ec2b"] .list-section-button {
+  /* Color / fill */
+  background-color: #F4A825 !important;   /* gold (--sk-color-29d) */
+  color: #ffffff !important;
+  border: 3px solid #000 !important;      /* matches CTA's --sk-color-7c4 */
+  border-radius: 0 !important;
+  box-sizing: border-box !important;
+
+  /* Type */
+  font-family: 'Fyodor', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.6px !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+
+  /* Sizing — match CTA height of ~60px without fighting line-height */
+  padding: 0 20.8px !important;
+  min-height: 60px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Kill the secondary-style outline pseudo-element if any */
+section[data-section-id="69a1e3b70627ef1961c0ec2b"] .list-section-button::before {
+  border: none !important;
+  content: none !important;
+}
+
+/* Hover state — preserve the CTA's resting fill so it doesn't
+   suddenly flip color on hover */
+section[data-section-id="69a1e3b70627ef1961c0ec2b"] .list-section-button:hover,
+section[data-section-id="69a1e3b70627ef1961c0ec2b"] .list-section-button:focus-visible {
+  background-color: #F4A825 !important;
+  color: #ffffff !important;
+  border-color: #000 !important;
+  opacity: 0.92 !important;
+}
+
+
+/* ============================================================
    CONTACT FORM — white fields, black type
    Block: #block-yui_3_17_2_1_1775494432162_2715
 

@@ -182,25 +182,25 @@ section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:hover .hover-over
 /* Overlay typography */
 section[data-section-id="69a1ab39e4a48e5f71c38db3"] .hover-overlay h2.overlay-title {
   color: #ffffff !important;
-  font-size: 26px !important;
-  line-height: 1.2 !important;
+  font-size: 34px !important;
+  line-height: 1.15 !important;
   text-align: center !important;
-  margin: 0 0 14px 0 !important;
+  margin: 0 0 16px 0 !important;
 }
 section[data-section-id="69a1ab39e4a48e5f71c38db3"] .hover-overlay p {
   color: #ffffff !important;
-  font-size: 17px !important;
-  line-height: 1.6 !important;
+  font-size: 20px !important;
+  line-height: 1.5 !important;
   text-align: center !important;
   margin: 0 !important;
 }
 
 /* Alternating overlay colors — green odd, gold even */
 section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:nth-child(odd) .hover-overlay {
-  background-color: rgba(51, 102, 83, 0.92) !important;
+  background-color: rgba(51, 102, 83, 0.98) !important;
 }
 section[data-section-id="69a1ab39e4a48e5f71c38db3"] .list-item:nth-child(even) .hover-overlay {
-  background-color: rgba(235, 153, 27, 0.92) !important;
+  background-color: rgba(235, 153, 27, 0.98) !important;
 }
 
 /* Title link stays inherited color, no underline */

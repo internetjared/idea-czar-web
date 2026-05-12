@@ -682,10 +682,10 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-overlay {
 
 /* Alternating colors — green odd, gold even (match Featured Work) */
 section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:nth-child(odd) .portfolio-overlay {
-  background-color: rgba(51, 102, 83, 0.92) !important;
+  background-color: rgba(51, 102, 83, 0.98) !important;
 }
 section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:nth-child(even) .portfolio-overlay {
-  background-color: rgba(235, 153, 27, 0.92) !important;
+  background-color: rgba(235, 153, 27, 0.98) !important;
 }
 
 /* Reveal overlay on hover with black border */
@@ -709,8 +709,8 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-text {
 }
 section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-title {
   color: #ffffff !important;
-  font-size: 26px !important;
-  line-height: 1.2 !important;
+  font-size: 34px !important;
+  line-height: 1.15 !important;
   text-align: center !important;
   margin: 0 !important;
   /* Kill Squarespace's built-in delayed transition */

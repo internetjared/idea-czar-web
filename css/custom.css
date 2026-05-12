@@ -709,8 +709,13 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-text {
 }
 section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-title {
   color: #ffffff !important;
+  /* Force Molot (Site Styles sets H3 to Bebas Neue, which is condensed
+     and reads smaller at the same px size — match home Featured Work) */
+  font-family: 'Molot', sans-serif !important;
   font-size: 34px !important;
   line-height: 1.15 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
   text-align: center !important;
   margin: 0 !important;
   /* Kill Squarespace's built-in delayed transition */

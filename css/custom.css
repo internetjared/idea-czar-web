@@ -717,12 +717,27 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-title {
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
   text-align: center !important;
-  margin: 0 !important;
+  margin: 0 0 14px 0 !important;
   /* Kill Squarespace's built-in delayed transition */
   transition: none !important;
   transition-delay: 0s !important;
   transition-duration: 0s !important;
   opacity: 1 !important;
+}
+
+/* Tagline / subtitle injected under the title (optional per project) */
+section[data-section-id="69a1d4ceddb6a504135dda80"] .ic-portfolio-subtitle {
+  color: #ffffff !important;
+  font-size: 20px !important;
+  line-height: 1.5 !important;
+  text-align: center !important;
+  margin: 0 !important;
+  max-width: 90% !important;
+  /* IBM Plex Sans for the body-style description, same as home page */
+  font-family: "IBM Plex Sans", sans-serif !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
 }
 section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:hover .portfolio-text {
   opacity: 1 !important;

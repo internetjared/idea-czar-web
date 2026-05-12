@@ -214,17 +214,22 @@
    3. PORTFOLIO FILTER — WORK PAGE
    Section: 69a1d4ceddb6a504135dda80
 
-   CLIENT WORKFLOW — how to tag a project:
+   CLIENT WORKFLOW — how to tag + caption a project:
      1. Open the project page in Squarespace
-     2. Add a Text Block anywhere on the page
-     3. Type a single line:   CATEGORIES: Copy, Brand Voice
-        Any combo of these (case-insensitive, comma-separated):
-          Brand Voice, Brand Guidelines, Copy, Content, B2B, Fun
+     2. Add a Text Block anywhere on the page (or two blocks)
+     3. Type these lines:
+          CATEGORIES: Copy, Brand Voice
+          TAGLINE: A short one-line description shown on hover.
+        Categories drive filtering on /work (case-insensitive,
+        comma-separated, any combo of:
+          Brand Voice, Brand Guidelines, Copy, Content, B2B, Fun).
+        Tagline (optional) shows under the project title in the
+        hover overlay on /work.
      4. Save
-     → Visitors never see this line: the script auto-hides any block
-       whose text starts with "CATEGORIES:" on the project page.
-     → On /work, the script fetches each project page in the
-       background, reads the line, and tags the card for filtering.
+     → Visitors never see these lines on the project page itself —
+       the script auto-hides any block starting with CATEGORIES: or
+       TAGLINE:. On /work, the script fetches each project page in
+       the background and uses the data to power filter + hover.
 
    Perf: each project page is fetched once per session and cached
    in sessionStorage so repeat visits to /work are instant.
@@ -239,52 +244,74 @@
   var CATEGORIES  = ['Brand Voice', 'Brand Guidelines', 'Copy', 'Content', 'B2B', 'Fun'];
   var CACHE_TTL_MS = 10 * 60 * 1000;  /* 10 minutes */
 
-  /* --- Hide "CATEGORIES: ..." blocks on individual project pages --- */
+  /* --- Hide "CATEGORIES:" or "TAGLINE:" blocks on project pages --- */
   function hideCategoriesMeta() {
     var blocks = document.querySelectorAll('.sqs-block-content');
     blocks.forEach(function (bc) {
       var txt = (bc.textContent || '').trim();
-      if (/^CATEGORIES?\s*:/i.test(txt) && txt.length < 200) {
+      if (/^(CATEGORIES?|TAGLINE)\s*:/i.test(txt) && txt.length < 400) {
         var block = bc.closest('.sqs-block') || bc;
         block.classList.add('ic-hidden-meta');
       }
     });
   }
 
-  /* --- Parse a string (HTML or text) for the CATEGORIES line --- */
-  function extractCategories(text) {
-    if (!text) return [];
-    var stripped = text.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ');
-    var m = stripped.match(/CATEGORIES?\s*:\s*([^\n\r<]+?)(?:\n|\r|<|$)/i);
-    if (!m) return [];
-    return m[1].split(',').map(function (c) {
-      return c.trim().toLowerCase();
-    }).filter(Boolean);
+  /* --- Parse a project page's HTML for CATEGORIES + TAGLINE --- */
+  function extractMeta(html) {
+    var meta = { cats: [], tagline: '' };
+    if (!html) return meta;
+
+    /* Parse the page into a real DOM so we can iterate true paragraph
+       breaks (replacing <p>…</p> blindly with \n is fragile). */
+    var doc;
+    try {
+      doc = new DOMParser().parseFromString(html, 'text/html');
+    } catch (e) { return meta; }
+
+    var nodes = doc.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, div');
+    for (var i = 0; i < nodes.length; i++) {
+      var txt = (nodes[i].textContent || '').trim();
+      if (!txt || txt.length > 400) continue;
+
+      var catMatch = txt.match(/^CATEGORIES?\s*:\s*(.+)$/i);
+      if (catMatch && !meta.cats.length) {
+        meta.cats = catMatch[1].split(',').map(function (c) {
+          return c.trim().toLowerCase();
+        }).filter(Boolean);
+        continue;
+      }
+
+      var tagMatch = txt.match(/^TAGLINE\s*:\s*(.+)$/i);
+      if (tagMatch && !meta.tagline) {
+        meta.tagline = tagMatch[1].trim();
+      }
+    }
+    return meta;
   }
 
-  /* --- Fetch project page HTML, cache in sessionStorage --- */
-  function fetchProjectCategories(href) {
-    var cacheKey = 'ic-cats:' + href;
+  /* --- Fetch project page HTML, cache parsed meta in sessionStorage --- */
+  function fetchProjectMeta(href) {
+    var cacheKey = 'ic-meta:' + href;
     try {
       var cachedRaw = sessionStorage.getItem(cacheKey);
       if (cachedRaw) {
         var cached = JSON.parse(cachedRaw);
-        if (cached.exp > Date.now()) return Promise.resolve(cached.cats);
+        if (cached.exp > Date.now()) return Promise.resolve(cached.meta);
       }
     } catch (e) {}
 
     return fetch(href, { credentials: 'include' })
       .then(function (r) { return r.text(); })
       .then(function (html) {
-        var cats = extractCategories(html);
+        var meta = extractMeta(html);
         try {
           sessionStorage.setItem(cacheKey, JSON.stringify({
-            cats: cats, exp: Date.now() + CACHE_TTL_MS
+            meta: meta, exp: Date.now() + CACHE_TTL_MS
           }));
         } catch (e) {}
-        return cats;
+        return meta;
       })
-      .catch(function () { return []; });
+      .catch(function () { return { cats: [], tagline: '' }; });
   }
 
   /* --- Filter-sidebar builder --- */
@@ -330,12 +357,23 @@
 
     var pills = filter.querySelectorAll('.ic-filter-pill');
 
-    /* Fetch each project page in parallel, parse CATEGORIES, tag grid items */
+    /* Fetch each project page in parallel, parse CATEGORIES + TAGLINE,
+       tag grid items, and inject the tagline into the hover overlay */
     var slides = Array.prototype.slice.call(grid.querySelectorAll('.grid-item'));
     Promise.all(slides.map(function (link) {
       var href = link.getAttribute('href') || '';
-      return fetchProjectCategories(href).then(function (cats) {
-        link.dataset.icCats = cats.join('|');
+      return fetchProjectMeta(href).then(function (meta) {
+        link.dataset.icCats = meta.cats.join('|');
+
+        if (meta.tagline) {
+          var textWrap = link.querySelector('.portfolio-text');
+          if (textWrap && !textWrap.querySelector('.ic-portfolio-subtitle')) {
+            var sub = document.createElement('p');
+            sub.className = 'ic-portfolio-subtitle';
+            sub.textContent = meta.tagline;
+            textWrap.appendChild(sub);
+          }
+        }
       });
     }));
 

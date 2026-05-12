@@ -108,11 +108,22 @@
     var h1 = block.querySelector('h1');
     if (!h1) return;
 
-    /* Lock height so scrambled chars don't reflow the layout */
-    var rect = h1.getBoundingClientRect();
-    h1.style.height    = rect.height + 'px';
-    h1.style.overflow  = 'hidden';
-    h1.style.wordBreak = 'break-all';
+    /* Wait until Molot (font-display: swap) is loaded before locking
+       the H1 height. Otherwise we capture the height with the
+       fallback font and the H1 jumps when the cipher ends because
+       Molot has loaded in the meantime and the natural height shifted. */
+    var fontsReady = (document.fonts && document.fonts.ready)
+      ? document.fonts.ready
+      : Promise.resolve();
+
+    fontsReady.then(startCipher);
+
+    function startCipher() {
+      /* Re-measure now that the real display font is in place */
+      var rect = h1.getBoundingClientRect();
+      h1.style.height    = rect.height + 'px';
+      h1.style.overflow  = 'hidden';
+      h1.style.wordBreak = 'break-all';
 
     var glyphs = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV';
 
@@ -188,18 +199,31 @@
       nodeBuffers.forEach(function (buf, node) { node.textContent = buf.join(''); });
 
       if (allDone || frame > totalFrames + 10) {
-        /* Restore exact original text and unlock height */
+        /* Two-step cleanup so we don't paint the text restoration AND
+           the height unlock in the same frame (which is what causes
+           the visible jump at the end of the cipher).
+
+           Frame 1: restore the original text but keep the layout locked
+                    so the browser paints the final text inside the
+                    same box the scramble was using.
+           Frame 2: unlock the styles. Because we waited for fonts
+                    to be ready when we captured the original height,
+                    the natural height now equals the locked height —
+                    so unlocking causes no perceptible movement. */
         textNodes.forEach(function (tn) { tn.node.textContent = tn.original; });
-        h1.style.height    = '';
-        h1.style.overflow  = '';
-        h1.style.wordBreak = '';
+        requestAnimationFrame(function () {
+          h1.style.height    = '';
+          h1.style.overflow  = '';
+          h1.style.wordBreak = '';
+        });
       } else {
         requestAnimationFrame(tick);
       }
     }
 
-    /* 500ms pause before scramble begins (lets page settle) */
-    setTimeout(function () { requestAnimationFrame(tick); }, 500);
+      /* 500ms pause before scramble begins (lets page settle) */
+      setTimeout(function () { requestAnimationFrame(tick); }, 500);
+    }
   }
 
   if (document.readyState === 'loading') {

@@ -742,6 +742,44 @@ section[data-section-id="69a1e3b70627ef1961c0ec2b"] .list-section-button:focus-v
 
 
 /* ============================================================
+   CONTACT PAGE FORM — match the homepage form
+   Block: #block-82ce350e3c90e7e3e03b (Contact page)
+   Reference: #block-yui_3_17_2_1_1775494432162_2715 (homepage)
+
+   The Contact page form used transparent fields and white submit
+   text, so it looked different from the homepage form. Match it:
+   white fields, black text, and dark submit text on the gold button.
+
+   Uses input[type=...] selectors (not just .field input) because
+   SquareKicker styles this block's fields via type-specific selectors
+   that would otherwise out-specify a generic override.
+   ============================================================ */
+
+#siteWrapper #block-82ce350e3c90e7e3e03b .field input[type="text"],
+#siteWrapper #block-82ce350e3c90e7e3e03b .field input[type="email"],
+#siteWrapper #block-82ce350e3c90e7e3e03b .field input[type="tel"],
+#siteWrapper #block-82ce350e3c90e7e3e03b .field input[type="number"],
+#siteWrapper #block-82ce350e3c90e7e3e03b .field textarea,
+#siteWrapper #block-82ce350e3c90e7e3e03b .field select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 0 !important;
+}
+
+#siteWrapper #block-82ce350e3c90e7e3e03b .field input::placeholder,
+#siteWrapper #block-82ce350e3c90e7e3e03b .field textarea::placeholder {
+  color: rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+}
+
+/* Submit button text: dark on gold, matching the homepage form
+   (was white on the Contact page) */
+#siteWrapper #block-82ce350e3c90e7e3e03b .form-button-wrapper .button {
+  color: #201D20 !important;
+}
+
+
+/* ============================================================
    13. WORK PAGE — CARD HOVER (matches Home page Featured Work)
    Section: 69a1d4ceddb6a504135dda80
 

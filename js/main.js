@@ -608,3 +608,89 @@
     init();
   }
 })();
+
+
+/* ============================================================
+   5. SERVICES PAGE — "HOW I USE AI" TOOLTIPS
+   Page: body.collection-69a1d51a8fb73a5aab6db6c6 (Services)
+
+   Each service has a text block whose paragraph starts with
+   "I use AI …". This script hides that paragraph and replaces
+   it with a gold AI sparkle badge + "How I use AI" affordance.
+   Hovering (or tapping on touch) reveals the blurb as a tooltip.
+
+   Because it keys off the "I use AI" text, adding a new service
+   with the same blurb pattern automatically gets a tooltip — no
+   code change needed. Editing the blurb text updates the tooltip
+   on the next page load.
+
+   CSS lives in custom.css.
+   ============================================================ */
+
+(function () {
+  var SPARKLE =
+    '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+      '<path d="M11 2.5l1.7 5.2 5.2 1.7-5.2 1.7L11 16.3l-1.7-5.2L4.1 9.4l5.2-1.7L11 2.5z"/>' +
+      '<path d="M18.2 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9.9-2.6z"/>' +
+    '</svg>';
+
+  function closeAll(except) {
+    document.querySelectorAll('.ic-ai-tip.is-open').forEach(function (w) {
+      if (w === except) return;
+      w.classList.remove('is-open');
+      var t = w.querySelector('.ic-ai-trigger');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  function initAITooltips() {
+    if (!document.body.classList.contains('collection-69a1d51a8fb73a5aab6db6c6')) return;
+
+    var contents = document.querySelectorAll('.sqs-block-html .sqs-html-content');
+    contents.forEach(function (content) {
+      var p = content.querySelector('p');
+      if (!p) return;
+      var text = (p.textContent || '').trim();
+      if (!/^I use AI/i.test(text)) return;
+      if (content.querySelector('.ic-ai-tip')) return;   /* already built */
+
+      p.style.display = 'none';   /* hide original blurb, keep it in DOM */
+
+      var wrap = document.createElement('div');
+      wrap.className = 'ic-ai-tip';
+      wrap.innerHTML =
+        '<button type="button" class="ic-ai-trigger" aria-expanded="false" aria-label="How I use AI">' +
+          '<span class="ic-ai-badge">' + SPARKLE + '</span>' +
+          '<span class="ic-ai-cta">How I use AI</span>' +
+        '</button>' +
+        '<div class="ic-ai-tooltip" role="tooltip"></div>';
+      wrap.querySelector('.ic-ai-tooltip').textContent = text;  /* textContent = safe */
+      content.appendChild(wrap);
+
+      var trigger = wrap.querySelector('.ic-ai-trigger');
+      /* Tap / click toggles (essential for touch where :hover doesn't fire) */
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        var open = !wrap.classList.contains('is-open');
+        closeAll(wrap);
+        wrap.classList.toggle('is-open', open);
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    });
+  }
+
+  /* Close open tooltips on outside click or Escape */
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.ic-ai-tip')) closeAll(null);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeAll(null);
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAITooltips);
+  } else {
+    initAITooltips();
+  }
+  window.addEventListener('mercury:load', initAITooltips);
+})();

@@ -993,3 +993,141 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
 body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df216 h1 span[class^="sqsrte-text-color"] {
   font-size: clamp(30px, 4.5vw, 52px) !important;
 }
+
+
+/* ============================================================
+   SERVICES PAGE — "HOW I USE AI" TOOLTIPS
+   Page: body.collection-69a1d51a8fb73a5aab6db6c6 (Services)
+
+   Styling for the AI sparkle badge + hover/tap tooltip that
+   replaces each service's "I use AI …" paragraph. Markup is
+   injected by main.js (section 5).
+   ============================================================ */
+
+.ic-ai-tip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Trigger: gold sparkle badge + dotted-underline label */
+.ic-ai-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: 0;
+  padding: 6px 0;
+  cursor: pointer;
+  font-family: 'Fyodor', sans-serif;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ic-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #F4A825;
+  color: #201D20;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(244, 168, 37, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: icAiPulse 2.4s ease-out infinite;
+}
+.ic-ai-badge svg { width: 20px; height: 20px; }
+
+/* Gentle attention pulse (invites interaction) */
+@keyframes icAiPulse {
+  0%   { box-shadow: 0 0 0 0   rgba(244, 168, 37, 0.55); }
+  70%  { box-shadow: 0 0 0 10px rgba(244, 168, 37, 0); }
+  100% { box-shadow: 0 0 0 0   rgba(244, 168, 37, 0); }
+}
+
+.ic-ai-cta {
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #201D20;
+  border-bottom: 2px dotted rgba(32, 29, 32, 0.5);
+  padding-bottom: 2px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.ic-ai-trigger:hover .ic-ai-badge,
+.ic-ai-trigger:focus-visible .ic-ai-badge {
+  transform: scale(1.08);
+  animation: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.ic-ai-trigger:hover .ic-ai-cta,
+.ic-ai-trigger:focus-visible .ic-ai-cta {
+  color: #C81E23;
+  border-bottom-color: #C81E23;
+}
+
+/* Tooltip bubble (appears above the badge) */
+.ic-ai-tooltip {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 14px);
+  width: max-content;
+  max-width: min(340px, 80vw);
+  background: #ffffff;
+  color: #201D20;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 16px 18px;
+  border: 1px solid #201D20;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  z-index: 20;
+  pointer-events: none;
+}
+/* Arrow (dark border + white fill) pointing down to the badge */
+.ic-ai-tooltip::after {
+  content: '';
+  position: absolute;
+  left: 24px;
+  top: 100%;
+  border: 8px solid transparent;
+  border-top-color: #201D20;
+}
+.ic-ai-tooltip::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  top: 100%;
+  margin-top: -1.5px;
+  border: 8px solid transparent;
+  border-top-color: #ffffff;
+  z-index: 1;
+}
+
+/* Reveal on hover, keyboard focus, or tap (.is-open via JS) */
+.ic-ai-tip:hover .ic-ai-tooltip,
+.ic-ai-tip:focus-within .ic-ai-tooltip,
+.ic-ai-tip.is-open .ic-ai-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Respect reduced-motion: no pulse, no transform jump */
+@media (prefers-reduced-motion: reduce) {
+  .ic-ai-badge { animation: none !important; }
+  .ic-ai-trigger:hover .ic-ai-badge,
+  .ic-ai-trigger:focus-visible .ic-ai-badge { transform: none; }
+  .ic-ai-tooltip { transition: opacity 0.01ms; transform: none; }
+}

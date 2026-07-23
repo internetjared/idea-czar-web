@@ -845,3 +845,66 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:hover .portfolio-
     display: none !important;
   }
 }
+
+
+/* ============================================================
+   ABOUT PAGE — ACCORDION "READ MORE" CONTROL
+   Page:  body.collection-69a1d4bf3444676a65fe5bb5 (About)
+   Block: .sqs-block-accordion
+
+   Converts the default accordion (title + right-side down arrow)
+   into: the first paragraph, with a "Read More" / "Read Less"
+   text control sitting BELOW it instead of an arrow.
+
+   Scoped to the About page collection so other accordions
+   elsewhere on the site keep their native behavior.
+   ============================================================ */
+
+/* Stack the title over the control instead of title | arrow */
+body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__click-target {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 16px !important;
+}
+
+/* Hide the native arrow graphic */
+body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-icon-container .arrow-container {
+  display: none !important;
+}
+
+/* Repurpose the (now empty) icon container as the text control.
+   Reset its fixed 14x14 sizing so the label can size to its text. */
+body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-icon-container {
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+/* The "Read More" / "Read Less" label */
+body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-icon-container::after {
+  content: 'Read More';
+  display: inline-block;
+  font-family: 'Fyodor', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: #201D20;
+  border-bottom: 2px solid #F4A825;
+  padding-bottom: 3px;
+  transition: color 0.2s ease;
+}
+
+/* Swap label text when the item is open */
+body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__click-target[aria-expanded="true"] .accordion-icon-container::after {
+  content: 'Read Less';
+}
+
+/* Hover — gold text to reinforce it's a control */
+body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__click-target:hover .accordion-icon-container::after,
+body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__click-target:focus-visible .accordion-icon-container::after {
+  color: #F4A825;
+}

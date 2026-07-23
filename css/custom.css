@@ -954,6 +954,18 @@ section[data-section-id="69a1a9057889be6b0aee15b2"]
   align-items: flex-end !important;
 }
 
+/* Mobile: also anchor the image CONTENT to the bottom. With
+   object-fit: contain, a device width that letterboxes the image
+   would otherwise center it and leave a sliver of gap below. Pinning
+   object-position to the bottom guarantees the figure/flag/crowd sits
+   right on the section divider line at every mobile width. */
+@media screen and (max-width: 767px) {
+  section[data-section-id="69a1a9057889be6b0aee15b2"]
+    .fe-block-yui_3_17_2_1_1784736317579_4307 img {
+    object-position: 50% 100% !important;
+  }
+}
+
 
 /* ============================================================
    SERVICES HERO — ANCHOR IMAGE TO SECTION BOTTOM

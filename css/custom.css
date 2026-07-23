@@ -908,3 +908,25 @@ body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__c
 body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__click-target:focus-visible .accordion-icon-container::after {
   color: #F4A825;
 }
+
+
+/* ============================================================
+   ABOUT PAGE — KEEP ILLUSTRATION ANCHORED WHEN ACCORDION OPENS
+   Page:  body.collection-69a1d4bf3444676a65fe5bb5 (About)
+   Block: .fe-block-yui_3_17_2_1_1775502879666_753 (Ken illustration)
+
+   The illustration and the accordion share one Fluid Engine grid.
+   The image block spans the full grid height and centers the image
+   vertically (.fluid-image-animation-wrapper: align-items:center).
+   When the accordion opens, the grid grows ~750px taller, so the
+   centered image drifts downward.
+
+   Anchoring the image to the TOP of its block keeps it fixed in
+   place regardless of the accordion's open/closed state.
+   ============================================================ */
+
+body.collection-69a1d4bf3444676a65fe5bb5
+  .fe-block-yui_3_17_2_1_1775502879666_753
+  .fluid-image-animation-wrapper {
+  align-items: flex-start !important;
+}

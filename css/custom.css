@@ -972,3 +972,24 @@ section[data-section-id="6a0345b4ec9a10795c95a66e"]
   .fluid-image-animation-wrapper {
   align-items: flex-end !important;
 }
+
+
+/* ============================================================
+   SERVICES PAGE — REDUCE HERO H1 SIZE
+   Page:  body.collection-69a1d51a8fb73a5aab6db6c6 (Services)
+   Block: #block-a28e50ebf0b3bc6df216 ("I elevate companies…")
+
+   The hero H1 was ~67px at desktop and stacked to 7 lines.
+   SquareKicker already applies an !important font-size on this
+   block (ID + element specificity), so we override with a higher-
+   specificity selector (#siteWrapper prefix + collection class)
+   and also target the inner sqsrte-text-color span, which carries
+   its own font-size rule.
+
+   Uses a responsive clamp so it still scales down on mobile.
+   ============================================================ */
+
+body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df216 h1,
+body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df216 h1 span[class^="sqsrte-text-color"] {
+  font-size: clamp(30px, 4.5vw, 52px) !important;
+}

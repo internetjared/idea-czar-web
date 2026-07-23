@@ -930,3 +930,26 @@ body.collection-69a1d4bf3444676a65fe5bb5
   .fluid-image-animation-wrapper {
   align-items: flex-start !important;
 }
+
+
+/* ============================================================
+   HOME HERO — ANCHOR FLAG IMAGE TO SECTION BOTTOM
+   Section: 69a1a9057889be6b0aee15b2 (hero)
+   Block:   .fe-block-yui_3_17_2_1_1784736317579_4307 (man + flag)
+
+   The hero image block reaches the section bottom, but the image
+   is vertically centered inside it
+   (.fluid-image-animation-wrapper: align-items:center). As the
+   viewport narrows, the block gets shorter than the image's
+   natural centered position allows, leaving a gap below the image.
+
+   Anchoring the image to the bottom keeps the figure standing on
+   the section's bottom edge at every width, so there's never
+   extra padding beneath it.
+   ============================================================ */
+
+section[data-section-id="69a1a9057889be6b0aee15b2"]
+  .fe-block-yui_3_17_2_1_1784736317579_4307
+  .fluid-image-animation-wrapper {
+  align-items: flex-end !important;
+}

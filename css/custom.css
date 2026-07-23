@@ -1163,3 +1163,90 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
     -webkit-text-stroke-width: 1px !important;
   }
 }
+
+
+/* ============================================================
+   MOBILE MENU — BRAND RESTYLE
+   Applies when the mobile nav overlay is open
+   (body.header--menu-open .header-menu…).
+
+   - Cream paper background (matches site pages)
+   - Gold accent bar across the top
+   - Fyodor bold uppercase nav links in the dark brand color
+   - Gold underline on the active/current page (animates from
+     center out via the .header-menu-nav-item-content pseudo)
+   - Red CONTACT button with a black border, matching the
+     brand's primary-button treatment
+   Scoped to menu-open state so the desktop header is untouched.
+   ============================================================ */
+
+/* Cream background */
+body.header--menu-open .header-menu-bg.theme-bg--primary {
+  background-color: #F5F0E5 !important;
+}
+
+/* Gold accent bar at the top of the overlay */
+body.header--menu-open .header-menu {
+  border-top: 5px solid #F4A825 !important;
+}
+
+/* Nav rhythm */
+body.header--menu-open .header-menu-nav-item {
+  margin: 0.28em 0 !important;
+}
+
+/* Nav links */
+body.header--menu-open .header-menu-nav-item a {
+  font-family: 'Fyodor', sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  color: #201D20 !important;
+}
+
+/* Gold underline anchored to the link text */
+body.header--menu-open .header-menu-nav-item a .header-menu-nav-item-content {
+  position: relative !important;
+  display: inline-block !important;
+  padding-bottom: 4px !important;
+}
+body.header--menu-open .header-menu-nav-item a .header-menu-nav-item-content::after {
+  content: '' !important;
+  position: absolute !important;
+  left: 50% !important;
+  right: 50% !important;
+  bottom: 0 !important;
+  height: 4px !important;
+  background-color: #F4A825 !important;
+  transition: left 0.3s cubic-bezier(0.65, 0, 0.35, 1),
+              right 0.3s cubic-bezier(0.65, 0, 0.35, 1) !important;
+}
+/* Active/current page: full-width gold underline */
+body.header--menu-open .header-menu-nav-item--active a .header-menu-nav-item-content::after {
+  left: 0 !important;
+  right: 0 !important;
+}
+/* Tap feedback */
+body.header--menu-open .header-menu-nav-item a:active {
+  color: #C81E23 !important;
+}
+
+/* CONTACT button — branded red bar with black border */
+body.header--menu-open .header-actions-action--cta .btn {
+  background-color: #C81E23 !important;
+  color: #ffffff !important;
+  font-family: 'Fyodor', sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  border: 3px solid #201D20 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  body.header--menu-open .header-menu-nav-item a .header-menu-nav-item-content::after {
+    transition: none !important;
+  }
+}

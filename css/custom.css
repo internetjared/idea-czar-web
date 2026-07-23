@@ -1190,6 +1190,29 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
 
 
 /* ============================================================
+   H1 OUTLINE CONSISTENCY — match the homepage everywhere
+   The home hero H1 uses a 3px gold (#F4A825) text-stroke via
+   SquareKicker. The About and Services hero H1s were set to 4px
+   (thicker) — same gold color/fill, just a heavier outline.
+
+   Normalize About + Services to 3px on desktop so every H1 outline
+   matches the homepage. Scoped to min-width:768px so the mobile
+   1px readability override above still wins on phones.
+   ============================================================ */
+
+@media screen and (min-width: 768px) {
+  /* About hero H1 */
+  #block-yui_3_17_2_1_1775502237673_443 h1,
+  #block-yui_3_17_2_1_1775502237673_443 h1 span[class^="sqsrte-text-color"],
+  /* Services hero H1 */
+  .sk-preset-8185753453162701 h1,
+  .sk-preset-8185753453162701 h1 span[class^="sqsrte-text-color"] {
+    -webkit-text-stroke-width: 3px !important;
+  }
+}
+
+
+/* ============================================================
    MOBILE MENU — BRAND RESTYLE
    Applies when the mobile nav overlay is open
    (body.header--menu-open .header-menu…).

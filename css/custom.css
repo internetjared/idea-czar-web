@@ -953,3 +953,22 @@ section[data-section-id="69a1a9057889be6b0aee15b2"]
   .fluid-image-animation-wrapper {
   align-items: flex-end !important;
 }
+
+
+/* ============================================================
+   SERVICES HERO — ANCHOR IMAGE TO SECTION BOTTOM
+   Section: 6a0345b4ec9a10795c95a66e (services hero)
+   Block:   .fe-block-yui_3_17_2_1_1784738134148_3696 (Ken + AI icons)
+
+   Same fix as the home hero: the image block reaches the section
+   bottom but the image is vertically centered inside it, leaving
+   a gap below (~126px) that grows/shifts as the viewport narrows.
+   Anchor the image to the bottom so it stays flush with the
+   section's bottom edge at every width.
+   ============================================================ */
+
+section[data-section-id="6a0345b4ec9a10795c95a66e"]
+  .fe-block-yui_3_17_2_1_1784738134148_3696
+  .fluid-image-animation-wrapper {
+  align-items: flex-end !important;
+}

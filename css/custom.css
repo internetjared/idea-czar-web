@@ -619,25 +619,37 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item.ic-hidden {
    (the JS also removes it as a safety net, but CSS here prevents flash) */
 .ic-hidden-meta { display: none !important; }
 
-/* ---------------- Mobile: stack above grid ---------------- */
+/* ---------------- Mobile: stack above grid, centered & even ---------------- */
 @media screen and (max-width: 767px) {
   section[data-section-id="69a1d4ceddb6a504135dda80"] > .content-wrapper > .content {
     flex-direction: column !important;
     gap: 12px !important;
   }
+  /* Filter: full width, centered label + pills, matching 20px gutter */
   .ic-portfolio-filter {
     flex: 0 0 auto;
     position: static;
     width: 100%;
-    padding: 24px 20px 0 20px;
+    padding: 24px 20px 4px 20px;
+    text-align: center;
+  }
+  .ic-filter-label {
+    text-align: center !important;
   }
   .ic-filter-list {
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;   /* center the pills */
     gap: 8px;
   }
+  /* Thumbnails: even 20px gutters both sides so the grid is centered
+     (Squarespace's default gives 0 left / ~23px right, shifting it
+     left). box-sizing keeps the padded width honest. Specificity must
+     match the section-scoped selector to beat the earlier override. */
   section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
-    padding-left: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
   }
 }
 

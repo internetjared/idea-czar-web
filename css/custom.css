@@ -1131,3 +1131,35 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
   .ic-ai-trigger:focus-visible .ic-ai-badge { transform: none; }
   .ic-ai-tooltip { transition: opacity 0.01ms; transform: none; }
 }
+
+
+/* ============================================================
+   MOBILE — THINNER HEADING TEXT-STROKE (readability)
+   Site-wide.
+
+   SquareKicker applies a fixed -webkit-text-stroke of 3–4px to
+   several display headings (home hero, about hero, services hero,
+   and one h2). At desktop sizes that outline looks intentional,
+   but the stroke width stays fixed as the font shrinks on mobile,
+   so at phone sizes the outline fills in the letters and the
+   headings become hard to read.
+
+   Reduce the stroke to 1px at <=767px on every heading that
+   SquareKicker strokes. These four selectors are the complete set
+   of stroked headings on the site (verified against the injected
+   SquareKicker styles). If a new outlined heading is added later
+   via SquareKicker, add its selector here too.
+   ============================================================ */
+
+@media screen and (max-width: 767px) {
+  #block-yui_3_17_2_1_1772213491145_49717 h2,
+  #block-yui_3_17_2_1_1772213491145_49717 h2 span[class^="sqsrte-text-color"],
+  #block-yui_3_17_2_1_1772202127116_2470 h1,
+  #block-yui_3_17_2_1_1772202127116_2470 h1 span[class^="sqsrte-text-color"],
+  #block-yui_3_17_2_1_1775502237673_443 h1,
+  #block-yui_3_17_2_1_1775502237673_443 h1 span[class^="sqsrte-text-color"],
+  .sk-preset-8185753453162701 h1,
+  .sk-preset-8185753453162701 h1 span[class^="sqsrte-text-color"] {
+    -webkit-text-stroke-width: 1px !important;
+  }
+}

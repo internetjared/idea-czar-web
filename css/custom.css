@@ -780,6 +780,37 @@ section[data-section-id="69a1e3b70627ef1961c0ec2b"] .list-section-button:focus-v
 
 
 /* ============================================================
+   FORM FIELD CAPTIONS — readable size (site-wide forms)
+
+   Squarespace's "small text" scale is set very low
+   (--small-text-size-value: .2), which renders form field captions
+   and helper text at ~3.2px — essentially invisible. This affects
+   the First/Last name sublabels, the "(required)" tags, and option
+   labels like the newsletter checkbox on both the homepage and
+   Contact page forms.
+
+   Bump them to readable sizes. Applied to all .sqs-block-form
+   instances so every form stays consistent.
+   ============================================================ */
+
+#siteWrapper .sqs-block-form .field .caption-text,
+#siteWrapper .sqs-block-form .field .caption {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+#siteWrapper .sqs-block-form .field .description,
+#siteWrapper .sqs-block-form .field .required {
+  font-size: 12px !important;
+}
+
+#siteWrapper .sqs-block-form .field .option label,
+#siteWrapper .sqs-block-form .field .option {
+  font-size: 13px !important;
+}
+
+
+/* ============================================================
    13. WORK PAGE — CARD HOVER (matches Home page Featured Work)
    Section: 69a1d4ceddb6a504135dda80
 

@@ -1414,3 +1414,35 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #footer-sections {
 #siteWrapper #block-e5c2d1d2d2614afd3a5f a .sqs-use--mask {
   fill: #bc132d !important;
 }
+
+
+/* ============================================================
+   SERVICES HERO — STACK IMAGE BELOW TEXT ON NARROW SCREENS
+   Section: 6a0345b4ec9a10795c95a66e
+   Blocks:  .fe-block-a28e50ebf0b3bc6df216 (headline + intro)
+            .fe-block-yui_3_17_2_1_1784738134148_3696 (Ken + AI icons)
+
+   Squarespace's Fluid Engine only switches to its stacked mobile
+   layout at <=767px. Between ~768px and ~1023px the hero stayed
+   side-by-side, squeezing the text column and crowding it against
+   the image.
+
+   Fix: re-place both blocks in the SAME grid (full width, image in
+   rows after the text) rather than converting the grid to flex.
+   The Fluid Engine derives each block's height from its row span —
+   switching to flex collapses the image container to 0 height and
+   the image disappears. Reassigning grid rows keeps that math intact.
+
+   >=1024px is untouched (side-by-side still has room there).
+   ============================================================ */
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-a28e50ebf0b3bc6df216 {
+    grid-column: 2 / 26 !important;
+    grid-row: 2 / 12 !important;
+  }
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-yui_3_17_2_1_1784738134148_3696 {
+    grid-column: 2 / 26 !important;
+    grid-row: 12 / 27 !important;
+  }
+}

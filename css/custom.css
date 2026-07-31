@@ -1163,10 +1163,15 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
 }
 
 /* Tooltip bubble (appears above the badge) */
+/* Opens BELOW the badge and extends to the right, so it never
+   covers the service body copy sitting above the trigger.
+   Left-anchored (not right) because .fluid-engine clips overflow-x —
+   extending rightward from the left column stays inside that box.
+   overflow-y is visible, so spilling below the section is fine. */
 .ic-ai-tooltip {
   position: absolute;
   left: 0;
-  bottom: calc(100% + 14px);
+  top: calc(100% + 14px);
   width: max-content;
   max-width: min(340px, 80vw);
   background: #ffffff;
@@ -1183,28 +1188,29 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(6px);
+  transform: translateY(-6px);
   transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
   z-index: 20;
   pointer-events: none;
 }
-/* Arrow (dark border + white fill) pointing down to the badge */
+/* Arrow (dark border + white fill) sits on TOP of the bubble,
+   pointing up at the badge above it */
 .ic-ai-tooltip::after {
   content: '';
   position: absolute;
   left: 24px;
-  top: 100%;
+  bottom: 100%;
   border: 8px solid transparent;
-  border-top-color: #201D20;
+  border-bottom-color: #201D20;
 }
 .ic-ai-tooltip::before {
   content: '';
   position: absolute;
   left: 24px;
-  top: 100%;
-  margin-top: -1.5px;
+  bottom: 100%;
+  margin-bottom: -1.5px;
   border: 8px solid transparent;
-  border-top-color: #ffffff;
+  border-bottom-color: #ffffff;
   z-index: 1;
 }
 
@@ -1470,5 +1476,5 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #footer-sections {
 section[data-section-id="69fa4eabce683c4c69f957ee"],
 section[data-section-id="69fa4ea2679405554d5f74dd"],
 section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
-  border-top: 1px solid rgba(32, 29, 32, 0.12) !important;
+  border-top: 1px solid rgba(32, 29, 32, 0.28) !important;
 }

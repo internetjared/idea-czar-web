@@ -1446,3 +1446,29 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #footer-sections {
     grid-row: 12 / 27 !important;
   }
 }
+
+
+/* ============================================================
+   SERVICES PAGE — SEPARATORS BETWEEN SERVICE SECTIONS
+   Page: Services
+
+   Adds a soft grey hairline between each of the four service
+   sections. Applied as a border-top on sections 2-4 so the lines
+   fall BETWEEN services (3 separators), leaving the hero → first
+   service boundary alone.
+
+   Section order:
+     1. Brand Voice        69fa4ac868d01d7b5dfeed24  (no top border)
+     2. Brand Guidelines   69fa4eabce683c4c69f957ee
+     3. Copy               69fa4ea2679405554d5f74dd
+     4. Content            69fa4e7770cb4b6b6fbe1f7c
+
+   Tone is a touch lighter than the footer divider so it reads as
+   a quiet grouping cue rather than a hard rule.
+   ============================================================ */
+
+section[data-section-id="69fa4eabce683c4c69f957ee"],
+section[data-section-id="69fa4ea2679405554d5f74dd"],
+section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
+  border-top: 1px solid rgba(32, 29, 32, 0.12) !important;
+}

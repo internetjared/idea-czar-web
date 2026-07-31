@@ -1366,3 +1366,51 @@ body.header--menu-open .header-actions-action--cta .btn {
     transition: none !important;
   }
 }
+
+
+/* ============================================================
+   SERVICES PAGE — LARGER HERO INTRO COPY
+   Page:  body.collection-69a1d51a8fb73a5aab6db6c6 (Services)
+   Block: #block-a28e50ebf0b3bc6df216 (hero H1 + intro paragraphs)
+
+   The intro copy under the headline was ~20px, small relative to
+   the hero. Bumped up with a responsive clamp so it still scales
+   down on mobile. #siteWrapper prefix is needed to out-specify
+   SquareKicker's own font-size rule on this block.
+   ============================================================ */
+
+#siteWrapper #block-a28e50ebf0b3bc6df216 p.sqsrte-large,
+#siteWrapper #block-a28e50ebf0b3bc6df216 p.sqsrte-large span[class^="sqsrte-text-color"] {
+  font-size: clamp(18px, 1.9vw, 24px) !important;
+  line-height: 1.6 !important;
+}
+
+
+/* ============================================================
+   SERVICES PAGE — DIVIDER ABOVE FOOTER
+   Page: body.collection-69a1d51a8fb73a5aab6db6c6 (Services)
+
+   Subtle hairline separating the last service section from the
+   footer. Uses the same tone/weight as the footer's existing
+   internal divider (above the copyright line) so they read as
+   one system.
+   ============================================================ */
+
+body.collection-69a1d51a8fb73a5aab6db6c6 #footer-sections {
+  border-top: 1px solid rgba(32, 29, 32, 0.14) !important;
+}
+
+
+/* ============================================================
+   CONTACT PAGE — SOCIAL ICON BACKGROUND
+   Block: #block-e5c2d1d2d2614afd3a5f (Contact page socials)
+
+   The icon "background" is the SVG .sqs-use--mask shape (not a CSS
+   background-color), driven by the --si-fill-mask variable. Setting
+   the mask fill directly recolors the rounded square behind each
+   glyph. Glyph itself stays cream (.sqs-use--icon).
+   ============================================================ */
+
+#siteWrapper #block-e5c2d1d2d2614afd3a5f a .sqs-use--mask {
+  fill: #bc132d !important;
+}

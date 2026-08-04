@@ -1369,25 +1369,12 @@ section[data-section-id="6a0345b4ec9a10795c95a66e"]
   align-items: flex-end !important;
 }
 
-/* ...but NOT at desktop. Two earlier changes compounded here:
-   widening the text column (to stop "COMMUNICATION." breaking
-   mid-word) squeezed the image column from 11 grid columns to 9,
-   so the image renders narrower — and since it's width-constrained,
-   shorter too. That left ~217px of slack inside its tall block, and
-   bottom-anchoring dumped ALL of it above the image: a 249px hole
-   between the header and the artwork.
-
-   Centering splits the slack evenly (~141px top and bottom) and the
-   artwork sits alongside the headline instead of sinking to the
-   floor. Narrow/stacked layouts keep the bottom anchor, where the
-   image genuinely should meet the section edge. */
-@media screen and (min-width: 1024px) {
-  section[data-section-id="6a0345b4ec9a10795c95a66e"]
-    .fe-block-yui_3_17_2_1_1784738134148_3696
-    .fluid-image-animation-wrapper {
-    align-items: center !important;
-  }
-}
+/* Bottom-anchored at EVERY width — the artwork should always meet
+   the bottom of the fold. (Briefly tried centering it at desktop to
+   close the gap above; reverted, because sitting on the section
+   edge is the intended look.) Any leftover column height therefore
+   collects above the image; the fix for that is giving the image
+   more width so it renders taller, not floating it. */
 
 
 /* ============================================================

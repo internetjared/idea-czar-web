@@ -49,6 +49,254 @@
 }
 
 
+/* ============================================================
+   1b. PORTED FROM SQUAREKICKER
+   ============================================================
+   Everything SquareKicker was injecting, rewritten as plain CSS so
+   the plugin can be removed. Ported verbatim (same selectors, same
+   values) so the site looks identical — with two mechanical changes:
+
+     1. Palette variables resolved to literal hex.
+        --sk-color-7c4  #000000FC   near-black
+        --sk-color-29d  #F4A825     brand gold
+        --sk-color-3c0  #336653A5   green @ 65% (About overlay)
+        --sk-color-2cc  #EEE3D5     beige (section backgrounds)
+        (--sk-color-936 / -260 / -d8a were defined but never used.)
+
+     2. Preset CLASSES resolved to the block IDs they were applied to.
+        This is the important one: SquareKicker adds .sk-preset-*
+        classes via JavaScript at runtime. Once the plugin is gone
+        those classes never appear, so any rule depending on them
+        would silently stop working.
+          .sk-preset-8185753453162701 -> #block-a28e50ebf0b3bc6df216
+          .sk-preset-4652941237684623 -> #block-yui_3_17_2_1_1772202649113_937
+                                         #block-yui_3_17_2_1_1778599065713_1044
+          .sk-preset-5479024868514497 -> #block-yui_3_17_2_1_1772202127116_2470
+
+   This block sits EARLY in the file on purpose: several of our own
+   rules further down were written to override SquareKicker, and at
+   equal specificity the later rule wins. Keep it above them.
+   ============================================================ */
+
+/* --- Hero "Get a Quote" text block --- */
+#block-5477d88409637e58f501 p:not(.sqsrte-large):not(.sqsrte-small),
+#block-5477d88409637e58f501 p:not(.sqsrte-large):not(.sqsrte-small) span[class^='sqsrte-text-color'] {
+  font-size: calc(clamp(0px, calc((var(--normal-text-size-value) - 1) * 1.2vmax + 1rem), calc(var(--normal-text-size-value) * 1rem)) * 0.76) !important;
+  font-weight: 400;
+  line-height: calc(var(--body-font-line-height) * 1.26);
+}
+#block-5477d88409637e58f501 p:not(.sqsrte-large):not(.sqsrte-small) strong,
+#block-5477d88409637e58f501 p:not(.sqsrte-large):not(.sqsrte-small) strong span[class^='sqsrte-text-color'] {
+  font-size: 1.56em !important;
+  color: #000000FC;
+  font-weight: 400;
+}
+
+/* --- Home hero sub-headline --- */
+#block-yui_3_17_2_1_1772202127116_2965 p.sqsrte-large,
+#block-yui_3_17_2_1_1772202127116_2965 p.sqsrte-large span[class^='sqsrte-text-color'] {
+  font-size: calc(clamp(0px, calc((var(--large-text-size-value) - 1) * 1.2vmax + 1rem), calc(var(--large-text-size-value) * 1rem)) * 1.15) !important;
+}
+
+/* --- About section heading + bold text --- */
+#block-yui_3_17_2_1_1772213491145_49717 p:not(.sqsrte-large):not(.sqsrte-small) strong,
+#block-yui_3_17_2_1_1772213491145_49717 p:not(.sqsrte-large):not(.sqsrte-small) strong span[class^='sqsrte-text-color'] {
+  font-size: 0.8em !important;
+}
+#block-yui_3_17_2_1_1772213491145_49717 h2,
+#block-yui_3_17_2_1_1772213491145_49717 h2 span[class^='sqsrte-text-color'] {
+  -webkit-text-stroke: #000000FC 3px;
+}
+
+/* --- Home hero H1 (0.95 size multiplier + gold stroke) --- */
+#block-yui_3_17_2_1_1772202127116_2470 h1,
+#block-yui_3_17_2_1_1772202127116_2470 h1 span[class^='sqsrte-text-color'] {
+  font-size: calc(clamp(0px, calc((var(--heading-1-size-value) - 1) * 1.2vmax + 1rem), calc(var(--heading-1-size-value) * 1rem)) * 0.95) !important;
+  -webkit-text-stroke: #F4A825 3px;
+}
+
+/* --- Home hero paragraph (was .sk-preset-5479024868514497) --- */
+#block-yui_3_17_2_1_1772202127116_2470 p:not(.sqsrte-large):not(.sqsrte-small),
+#block-yui_3_17_2_1_1772202127116_2470 p:not(.sqsrte-large):not(.sqsrte-small) span[class^='sqsrte-text-color'] {
+  font-size: calc(clamp(0px, calc((var(--normal-text-size-value) - 1) * 1.2vmax + 1rem), calc(var(--normal-text-size-value) * 1rem)) * 0.8) !important;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+
+/* --- About section: green overlay on the background image --- */
+#siteWrapper section[data-section-id="69a1e248a45af16353a9dffd"] .section-background:before {
+  background: #336653A5;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+#siteWrapper section[data-section-id="69a1e248a45af16353a9dffd"] .content-wrapper {
+  z-index: 1;
+}
+
+/* --- About social icons: gold fill, black border --- */
+#block-yui_3_17_2_1_1773840435644_1939 a {
+  background: #F4A825;
+}
+#block-yui_3_17_2_1_1773840435644_1939 .sqs-use--mask {
+  fill: none;
+}
+#block-yui_3_17_2_1_1773840435644_1939 a .sqs-use--icon {
+  fill: #000000FC;
+}
+#siteWrapper #block-yui_3_17_2_1_1773840435644_1939 a {
+  border-color: hsl(var(--black-hsl));
+  border-width: 3px;
+  box-sizing: border-box;
+  box-shadow: none;
+  border-style: solid;
+  padding: 3px;
+}
+#block-yui_3_17_2_1_1773840435644_1939 .sqs-svg-icon--wrapper > div {
+  transform: scale(1);
+}
+
+/* --- Gold top/bottom rules on a block --- */
+#siteWrapper #block-yui_3_17_2_1_1773845080377_2202 {
+  border-color: #F4A825;
+  border-width: 15px;
+  box-sizing: border-box;
+  border-style: solid;
+  border-left-width: 0px !important;
+  border-right-width: 0px !important;
+}
+
+/* --- About hero H1 stroke (width overridden to 3px further down) --- */
+#block-yui_3_17_2_1_1775502237673_443 h1,
+#block-yui_3_17_2_1_1775502237673_443 h1 span[class^='sqsrte-text-color'] {
+  -webkit-text-stroke: #F4A825 4px;
+}
+
+/* --- Home contact-section social icons --- */
+#block-yui_3_17_2_1_1775497994544_29883 a {
+  background: #F4A825;
+}
+#block-yui_3_17_2_1_1775497994544_29883 .sqs-use--mask {
+  fill: none;
+}
+#block-yui_3_17_2_1_1775497994544_29883 a .sqs-use--icon {
+  fill: hsl(var(--lightAccent-hsl));
+}
+
+/* --- Services list section: beige background --- */
+#siteWrapper section[data-section-id="69a1e3b70627ef1961c0ec2b"].has-background .section-background:before {
+  background: #EEE3D5;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+#siteWrapper section[data-section-id="69a1e3b70627ef1961c0ec2b"].has-background .content-wrapper {
+  z-index: 1;
+}
+
+/* --- Home contact form (field bg/colour overridden further down) --- */
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .form-button-wrapper .button {
+  background: #F4A825 !important;
+}
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field input[type="text"],
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field input[type="email"],
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field textarea {
+  border: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: inherit;
+}
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field input[type="text"]::placeholder,
+#siteWrapper #block-yui_3_17_2_1_1775494432162_2715 .field input[type="email"]::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+/* --- Work page: faded section background --- */
+#siteWrapper section[data-section-id="69a1d4ceddb6a504135dda80"] .section-background > * {
+  opacity: 23%;
+}
+
+/* --- Contact page social icons (mask fill set to #bc132d further down) --- */
+#block-e5c2d1d2d2614afd3a5f a {
+  background: hsl(var(--accent-hsl));
+}
+#block-e5c2d1d2d2614afd3a5f .sqs-use--mask {
+  fill: none;
+}
+#block-e5c2d1d2d2614afd3a5f a .sqs-use--icon {
+  fill: hsl(var(--lightAccent-hsl));
+}
+
+/* --- Contact page form (field bg/colour overridden further down) --- */
+#siteWrapper #block-82ce350e3c90e7e3e03b .form-button-wrapper .button {
+  background: #F4A825 !important;
+}
+#siteWrapper #block-82ce350e3c90e7e3e03b .field input[type="text"],
+#siteWrapper #block-82ce350e3c90e7e3e03b .field input[type="email"],
+#siteWrapper #block-82ce350e3c90e7e3e03b .field textarea {
+  border: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: inherit;
+}
+#siteWrapper #block-82ce350e3c90e7e3e03b .field input[type="text"]::placeholder,
+#siteWrapper #block-82ce350e3c90e7e3e03b .field input[type="email"]::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+/* --- Services hero H1: size multiplier + stroke.
+       (was .sk-preset-8185753453162701 for the stroke.)
+       Both the 0.9 size and the 4px width are superseded further
+       down, where the H1 is matched to the other pages. --- */
+#block-a28e50ebf0b3bc6df216 h1,
+#block-a28e50ebf0b3bc6df216 h1 span[class^='sqsrte-text-color'] {
+  font-size: calc(clamp(0px, calc((var(--heading-1-size-value) - 1) * 1.2vmax + 1rem), calc(var(--heading-1-size-value) * 1rem)) * 0.9) !important;
+  -webkit-text-stroke: #F4A825 4px;
+}
+
+/* --- Services page: beige section backgrounds --- */
+#siteWrapper section[data-section-id="69fa4ac868d01d7b5dfeed24"] .section-background {
+  background: #EEE3D5 !important;
+}
+#siteWrapper section[data-section-id="69fa4ac868d01d7b5dfeed24"],
+#siteWrapper section[data-section-id="69fa4ac868d01d7b5dfeed24"] .section-border {
+  background: none;
+}
+#siteWrapper section[data-section-id="69fa4ea2679405554d5f74dd"] .section-background {
+  background: #EEE3D5 !important;
+}
+#siteWrapper section[data-section-id="69fa4ea2679405554d5f74dd"],
+#siteWrapper section[data-section-id="69fa4ea2679405554d5f74dd"] .section-border {
+  background: none;
+}
+
+/* --- Gold buttons with black border
+       (was .sk-preset-4652941237684623, applied to two blocks) --- */
+#siteWrapper #block-yui_3_17_2_1_1772202649113_937 .sqs-block-button-element,
+#siteWrapper #block-yui_3_17_2_1_1778599065713_1044 .sqs-block-button-element {
+  background: #F4A825;
+}
+#siteWrapper #block-yui_3_17_2_1_1772202649113_937 .sqs-block-button-container a,
+#siteWrapper #block-yui_3_17_2_1_1778599065713_1044 .sqs-block-button-container a {
+  border-color: #000000FC;
+  border-width: 3px;
+  box-sizing: border-box;
+  border-style: solid;
+}
+#siteWrapper #block-yui_3_17_2_1_1772202649113_937 .sqs-block-button-container a::before,
+#siteWrapper #block-yui_3_17_2_1_1778599065713_1044 .sqs-block-button-container a::before {
+  border: none;
+}
+
+
 /* ----------------------------------------------------------
    2. HEADINGS & NAV TYPOGRAPHY
    ---------------------------------------------------------- */
@@ -1280,8 +1528,8 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
   #block-yui_3_17_2_1_1772202127116_2470 h1 span[class^="sqsrte-text-color"],
   #block-yui_3_17_2_1_1775502237673_443 h1,
   #block-yui_3_17_2_1_1775502237673_443 h1 span[class^="sqsrte-text-color"],
-  .sk-preset-8185753453162701 h1,
-  .sk-preset-8185753453162701 h1 span[class^="sqsrte-text-color"] {
+  #block-a28e50ebf0b3bc6df216 h1,
+  #block-a28e50ebf0b3bc6df216 h1 span[class^="sqsrte-text-color"] {
     -webkit-text-stroke-width: 1px !important;
   }
 }
@@ -1303,8 +1551,8 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
   #block-yui_3_17_2_1_1775502237673_443 h1,
   #block-yui_3_17_2_1_1775502237673_443 h1 span[class^="sqsrte-text-color"],
   /* Services hero H1 */
-  .sk-preset-8185753453162701 h1,
-  .sk-preset-8185753453162701 h1 span[class^="sqsrte-text-color"] {
+  #block-a28e50ebf0b3bc6df216 h1,
+  #block-a28e50ebf0b3bc6df216 h1 span[class^="sqsrte-text-color"] {
     -webkit-text-stroke-width: 3px !important;
   }
 }

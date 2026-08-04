@@ -1611,11 +1611,41 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
 @media screen and (min-width: 768px) {
   /* About hero H1 */
   #block-yui_3_17_2_1_1775502237673_443 h1,
-  #block-yui_3_17_2_1_1775502237673_443 h1 span[class^="sqsrte-text-color"],
-  /* Services hero H1 */
-  #block-a28e50ebf0b3bc6df216 h1,
-  #block-a28e50ebf0b3bc6df216 h1 span[class^="sqsrte-text-color"] {
+  #block-yui_3_17_2_1_1775502237673_443 h1 span[class^="sqsrte-text-color"] {
     -webkit-text-stroke-width: 3px !important;
+  }
+}
+
+
+/* ============================================================
+   H1 GOLD OUTLINE — BASELINE, BLOCK-AGNOSTIC
+
+   The outline used to be attached to specific block IDs (inherited
+   from how SquareKicker wrote it). That's brittle: replacing a text
+   block in the Squarespace editor mints a NEW block ID, so the rule
+   silently stops matching and the headline loses its outline —
+   exactly what happened when the Services hero was rebuilt.
+
+   This is the baseline instead: every H1 gets the gold outline,
+   keyed to nothing but the element. New or rebuilt hero blocks pick
+   it up automatically.
+
+   The per-block rules above still win where they exist (Home and
+   About), so nothing there changes — they already resolve to the
+   same gold at 3px.
+   ============================================================ */
+
+h1,
+h1 span[class^="sqsrte-text-color"] {
+  -webkit-text-stroke: 3px #F4A825;
+}
+
+/* Same mobile thinning as the rest — a fixed 3px outline fills in
+   the letterforms once the type shrinks. */
+@media screen and (max-width: 767px) {
+  h1,
+  h1 span[class^="sqsrte-text-color"] {
+    -webkit-text-stroke-width: 1px;
   }
 }
 

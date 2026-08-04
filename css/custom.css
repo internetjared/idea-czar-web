@@ -1835,10 +1835,11 @@ section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
              because the block was placed starting at row 3
      ~199px  total before the headline even begins
 
-   The empty rows are pure dead weight — the section padding is
-   already providing the breathing room. Pull the text block (and
-   the image with it, to keep their relative alignment) up so the
-   grid starts doing work immediately.
+   Pulled the text block (and the image with it, to preserve their
+   relative alignment) up one row. Going all the way to row 1 tested
+   too tight — the headline butted against the header — so row 2 is
+   the balance: ~37px of breathing room instead of ~74px of dead
+   space. Headline now starts at y~161 instead of y~196.
 
    Desktop only: <=1023px uses the stacked layout defined earlier,
    which has its own row assignments.
@@ -1846,9 +1847,9 @@ section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
 
 @media screen and (min-width: 1024px) {
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-a28e50ebf0b3bc6df216 {
-    grid-row: 1 / 12 !important;
+    grid-row: 2 / 13 !important;
   }
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-yui_3_17_2_1_1784738134148_3696 {
-    grid-row: 1 / 13 !important;
+    grid-row: 2 / 14 !important;
   }
 }

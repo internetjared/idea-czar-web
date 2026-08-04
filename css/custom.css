@@ -53,11 +53,11 @@
    2. HEADINGS & NAV TYPOGRAPHY
    ---------------------------------------------------------- */
 
-/* All headings use Molot, uppercase, slight tracking */
+/* All headings use Molot, uppercase, with open tracking */
 h1, h2, h3 {
   font-family: 'Molot', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 /* Nav links, primary buttons, h4, list-section titles, project
@@ -76,7 +76,7 @@ h2.item-pagination-title,
   font-family: 'Fyodor', sans-serif !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
-  letter-spacing: normal !important;
+  letter-spacing: 0.08em !important;
 }
 
 
@@ -502,7 +502,7 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
   font-weight: 700;
   font-size: 18px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.09em;
   color: #201D20;
   margin-bottom: 18px;
 }
@@ -528,7 +528,7 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
   font-weight: 700;
   font-size: 15px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.09em;
   line-height: 1;
   white-space: nowrap;            /* keep "Brand Guidelines" on one line */
   cursor: pointer;
@@ -579,7 +579,7 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
   font-weight: 700;
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.11em;
   color: #201D20;
   cursor: pointer;
   text-decoration: underline;
@@ -611,7 +611,7 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item.ic-hidden {
   font-family: 'Fyodor', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.09em;
   color: rgba(32, 29, 32, 0.5);
 }
 
@@ -683,7 +683,7 @@ section[data-section-id="69a1e3b70627ef1961c0ec2b"] .list-section-button {
   font-family: 'Fyodor', sans-serif !important;
   font-size: 16px !important;
   font-weight: 700 !important;
-  letter-spacing: 1.6px !important;
+  letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
   line-height: 1 !important;
 
@@ -884,7 +884,7 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-title {
   font-family: 'Molot', sans-serif !important;
   font-size: 34px !important;
   line-height: 1.15 !important;
-  letter-spacing: 0.05em !important;
+  letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
   text-align: center !important;
   margin: 0 0 14px 0 !important;
@@ -970,7 +970,7 @@ body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-icon-co
   font-family: 'Fyodor', sans-serif;
   font-weight: 700;
   font-size: 13px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   line-height: 1;
   color: #201D20;
@@ -1142,7 +1142,7 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
 .ic-ai-cta {
   font-weight: 700;
   font-size: 13px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: #201D20;
   border-bottom: 2px dotted rgba(32, 29, 32, 0.5);
@@ -1322,7 +1322,7 @@ body.header--menu-open .header-menu-nav-item a {
   font-family: 'Fyodor', sans-serif !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
+  letter-spacing: 0.08em !important;
   color: #201D20 !important;
 }
 
@@ -1360,7 +1360,7 @@ body.header--menu-open .header-actions-action--cta .btn {
   font-family: 'Fyodor', sans-serif !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.1em !important;
+  letter-spacing: 0.13em !important;
   border: 3px solid #201D20 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -1477,4 +1477,23 @@ section[data-section-id="69fa4eabce683c4c69f957ee"],
 section[data-section-id="69fa4ea2679405554d5f74dd"],
 section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
   border-top: 1px solid rgba(32, 29, 32, 0.28) !important;
+}
+
+
+/* ============================================================
+   FOOTER CODE BLOCK — MATCH THE OPEN CAPS TRACKING
+
+   The footer lives in a Squarespace Code Block with its own inline
+   <style>. That inline block comes after this file in the document,
+   so it wins at equal specificity — hence !important here to bring
+   its uppercase nav and copyright in line with the rest of the
+   site's caps tracking.
+   ============================================================ */
+
+.ic-footer-nav a {
+  letter-spacing: 0.1em !important;
+}
+
+.ic-footer-copyright {
+  letter-spacing: 0.14em !important;
 }

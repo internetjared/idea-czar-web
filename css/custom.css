@@ -81,7 +81,7 @@
 /* --- Hero "Get a Quote" text block --- */
 #block-5477d88409637e58f501 p:not(.sqsrte-large):not(.sqsrte-small),
 #block-5477d88409637e58f501 p:not(.sqsrte-large):not(.sqsrte-small) span[class^='sqsrte-text-color'] {
-  font-size: calc(clamp(0px, calc((var(--normal-text-size-value) - 1) * 1.2vmax + 1rem), calc(var(--normal-text-size-value) * 1rem)) * 0.76) !important;
+  font-size: calc(clamp(0px, calc((var(--normal-text-size-value) - 1) * 1.2vw + 1rem), calc(var(--normal-text-size-value) * 1rem)) * 0.76) !important;
   font-weight: 400;
   line-height: calc(var(--body-font-line-height) * 1.26);
 }
@@ -95,7 +95,7 @@
 /* --- Home hero sub-headline --- */
 #block-yui_3_17_2_1_1772202127116_2965 p.sqsrte-large,
 #block-yui_3_17_2_1_1772202127116_2965 p.sqsrte-large span[class^='sqsrte-text-color'] {
-  font-size: calc(clamp(0px, calc((var(--large-text-size-value) - 1) * 1.2vmax + 1rem), calc(var(--large-text-size-value) * 1rem)) * 1.15) !important;
+  font-size: calc(clamp(0px, calc((var(--large-text-size-value) - 1) * 1.2vw + 1rem), calc(var(--large-text-size-value) * 1rem)) * 1.15) !important;
 }
 
 /* --- About section heading + bold text --- */
@@ -111,14 +111,14 @@
 /* --- Home hero H1 (0.95 size multiplier + gold stroke) --- */
 #block-yui_3_17_2_1_1772202127116_2470 h1,
 #block-yui_3_17_2_1_1772202127116_2470 h1 span[class^='sqsrte-text-color'] {
-  font-size: calc(clamp(0px, calc((var(--heading-1-size-value) - 1) * 1.2vmax + 1rem), calc(var(--heading-1-size-value) * 1rem)) * 0.95) !important;
+  font-size: calc(clamp(0px, calc((var(--heading-1-size-value) - 1) * 1.2vw + 1rem), calc(var(--heading-1-size-value) * 1rem)) * 0.95) !important;
   -webkit-text-stroke: #F4A825 3px;
 }
 
 /* --- Home hero paragraph (was .sk-preset-5479024868514497) --- */
 #block-yui_3_17_2_1_1772202127116_2470 p:not(.sqsrte-large):not(.sqsrte-small),
 #block-yui_3_17_2_1_1772202127116_2470 p:not(.sqsrte-large):not(.sqsrte-small) span[class^='sqsrte-text-color'] {
-  font-size: calc(clamp(0px, calc((var(--normal-text-size-value) - 1) * 1.2vmax + 1rem), calc(var(--normal-text-size-value) * 1rem)) * 0.8) !important;
+  font-size: calc(clamp(0px, calc((var(--normal-text-size-value) - 1) * 1.2vw + 1rem), calc(var(--normal-text-size-value) * 1rem)) * 0.8) !important;
   font-weight: 400;
   letter-spacing: 0.12em;
 }
@@ -258,7 +258,7 @@
        down, where the H1 is matched to the other pages. --- */
 #block-a28e50ebf0b3bc6df216 h1,
 #block-a28e50ebf0b3bc6df216 h1 span[class^='sqsrte-text-color'] {
-  font-size: calc(clamp(0px, calc((var(--heading-1-size-value) - 1) * 1.2vmax + 1rem), calc(var(--heading-1-size-value) * 1rem)) * 0.9) !important;
+  font-size: calc(clamp(0px, calc((var(--heading-1-size-value) - 1) * 1.2vw + 1rem), calc(var(--heading-1-size-value) * 1rem)) * 0.9) !important;
   -webkit-text-stroke: #F4A825 4px;
 }
 
@@ -294,6 +294,61 @@
 #siteWrapper #block-yui_3_17_2_1_1772202649113_937 .sqs-block-button-container a::before,
 #siteWrapper #block-yui_3_17_2_1_1778599065713_1044 .sqs-block-button-container a::before {
   border: none;
+}
+
+
+/* ============================================================
+   1c. RESPONSIVE TYPE SCALE — width-driven
+   ============================================================
+   Squarespace sizes headings with:
+     clamp(0px, (SIZE - 1) * 1.2vmax + 1rem, SIZE * 1rem)
+
+   The problem is vmax: it resolves to whichever viewport dimension
+   is LARGER. On any portrait screen — i.e. every phone and every
+   tablet held upright — that's the HEIGHT, so headings get sized
+   off a number that has nothing to do with the space they have to
+   fit into.
+
+   Measured on this site at 500x900 (a normal phone):
+     rendered via vmax .... 60.3px
+     correct for the width  40.6px
+     ~48% oversized
+   It also means rotating a phone to landscape makes the headline
+   SHRINK, despite there being more width. Backwards.
+
+   Fix: identical formula with vw instead of vmax, so type scales
+   with available WIDTH. Desktop is unchanged (above ~1333px the
+   clamp was already pinned to its max), and a floor is added so
+   headings stay legible on small screens instead of trending to
+   near-nothing.
+
+   The same swap has been applied to the per-block rules ported
+   from SquareKicker, so block-level size multipliers still work
+   but are now width-driven too.
+   ============================================================ */
+
+h1, h1 span[class^="sqsrte-text-color"] {
+  font-size: clamp(
+    2rem,
+    calc((var(--heading-1-size-value) - 1) * 1.2vw + 1rem),
+    calc(var(--heading-1-size-value) * 1rem)
+  ) !important;
+}
+
+h2, h2 span[class^="sqsrte-text-color"] {
+  font-size: clamp(
+    1.5rem,
+    calc((var(--heading-2-size-value) - 1) * 1.2vw + 1rem),
+    calc(var(--heading-2-size-value) * 1rem)
+  ) !important;
+}
+
+h3, h3 span[class^="sqsrte-text-color"] {
+  font-size: clamp(
+    1.25rem,
+    calc((var(--heading-3-size-value) - 1) * 1.2vw + 1rem),
+    calc(var(--heading-3-size-value) * 1rem)
+  ) !important;
 }
 
 
@@ -1338,7 +1393,7 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
 body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df216 h1 span[class^="sqsrte-text-color"] {
   font-size: clamp(
     0px,
-    calc((var(--heading-1-size-value) - 1) * 1.2vmax + 1rem),
+    calc((var(--heading-1-size-value) - 1) * 1.2vw + 1rem),
     calc(var(--heading-1-size-value) * 1rem)
   ) !important;
 }
@@ -1767,4 +1822,33 @@ section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
 
 .ic-footer-copyright {
   letter-spacing: 0.14em !important;
+}
+
+
+/* ============================================================
+   SERVICES HERO — REMOVE DEAD SPACE ABOVE THE HEADLINE
+   Section: 6a0345b4ec9a10795c95a66e
+
+   Two things stacked up above the H1 at desktop:
+     ~125px  section padding-top (scales with viewport)
+     ~74px   two EMPTY Fluid Engine grid rows above the text block,
+             because the block was placed starting at row 3
+     ~199px  total before the headline even begins
+
+   The empty rows are pure dead weight — the section padding is
+   already providing the breathing room. Pull the text block (and
+   the image with it, to keep their relative alignment) up so the
+   grid starts doing work immediately.
+
+   Desktop only: <=1023px uses the stacked layout defined earlier,
+   which has its own row assignments.
+   ============================================================ */
+
+@media screen and (min-width: 1024px) {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-a28e50ebf0b3bc6df216 {
+    grid-row: 1 / 12 !important;
+  }
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-yui_3_17_2_1_1784738134148_3696 {
+    grid-row: 1 / 13 !important;
+  }
 }

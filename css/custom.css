@@ -1068,23 +1068,46 @@ section[data-section-id="6a0345b4ec9a10795c95a66e"]
 
 
 /* ============================================================
-   SERVICES PAGE — REDUCE HERO H1 SIZE
+   SERVICES PAGE — HERO H1 MATCHES THE OTHER PAGES
    Page:  body.collection-69a1d51a8fb73a5aab6db6c6 (Services)
-   Block: #block-a28e50ebf0b3bc6df216 ("I elevate companies…")
+   Block: #block-a28e50ebf0b3bc6df216
 
-   The hero H1 was ~67px at desktop and stacked to 7 lines.
-   SquareKicker already applies an !important font-size on this
-   block (ID + element specificity), so we override with a higher-
-   specificity selector (#siteWrapper prefix + collection class)
-   and also target the inner sqsrte-text-color span, which carries
-   its own font-size rule.
+   SquareKicker applies its own font-size to this block with a 0.9
+   multiplier, making the Services H1 smaller than every other page.
+   (It was reduced further while the headline copy was much longer;
+   the copy has since been shortened, so it no longer needs to be.)
 
-   Uses a responsive clamp so it still scales down on mobile.
+   Restating the standard Squarespace H1 formula WITHOUT the 0.9
+   multiplier puts it at exactly the same computed size as the About
+   hero H1 — same size, tracking, and 3px gold stroke.
+
+   Needs the #siteWrapper + collection-class prefix to out-specify
+   SquareKicker, and must also target the inner sqsrte-text-color
+   span, which carries its own font-size.
    ============================================================ */
 
 body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df216 h1,
 body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df216 h1 span[class^="sqsrte-text-color"] {
-  font-size: clamp(30px, 4.5vw, 52px) !important;
+  font-size: clamp(
+    0px,
+    calc((var(--heading-1-size-value) - 1) * 1.2vmax + 1rem),
+    calc(var(--heading-1-size-value) * 1rem)
+  ) !important;
+}
+
+/* At the full H1 size the word "COMMUNICATION." (~689px) is wider
+   than the original text column (~619px), and Squarespace sets
+   overflow-wrap: break-word on headings — so it split mid-word as
+   "COMMUNICATIO / N.". Widen the text column by two grid columns
+   (and pull the image in to match) so the headline breaks on real
+   word boundaries. Desktop only; <=1023px already stacks. */
+@media screen and (min-width: 1024px) {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-a28e50ebf0b3bc6df216 {
+    grid-column: 2 / 17 !important;
+  }
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-yui_3_17_2_1_1784738134148_3696 {
+    grid-column: 17 / 26 !important;
+  }
 }
 
 

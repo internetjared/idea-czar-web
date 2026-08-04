@@ -327,11 +327,17 @@
    but are now width-driven too.
    ============================================================ */
 
+/* The 0.95 multiplier matches the Home hero, which is the reference
+   for H1 size across the site. It originally came from a SquareKicker
+   per-block override on Home only, which left About and Services ~5%
+   larger (81.6px vs 77.5px at 1440). Folding it into the global scale
+   makes every H1 match Home instead of Home being the odd one out.
+   The floor stays at 2rem so small screens aren't scaled down twice. */
 h1, h1 span[class^="sqsrte-text-color"] {
   font-size: clamp(
     2rem,
-    calc((var(--heading-1-size-value) - 1) * 1.2vw + 1rem),
-    calc(var(--heading-1-size-value) * 1rem)
+    calc(((var(--heading-1-size-value) - 1) * 1.2vw + 1rem) * 0.95),
+    calc(var(--heading-1-size-value) * 1rem * 0.95)
   ) !important;
 }
 

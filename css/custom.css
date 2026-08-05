@@ -337,21 +337,18 @@ h1, h1 span[class^="sqsrte-text-color"] {
   ) !important;
 }
 
-h2, h2 span[class^="sqsrte-text-color"] {
-  font-size: clamp(
-    1.5rem,
-    calc((var(--heading-2-size-value) - 1) * 1.2vw + 1rem),
-    calc(var(--heading-2-size-value) * 1rem)
-  ) !important;
-}
+/* NOTE: deliberately NOT doing this for h2/h3.
+   A blanket "h2 { font-size: ... !important }" looks tidy but is
+   destructive: Squarespace sizes H2/H3 contextually — Featured Work
+   item titles and the service-area headings are 24px by design —
+   and an !important global forces every one of them to the theme's
+   H2 maximum (64px). That shipped briefly and blew those titles up
+   ~2.7x.
 
-h3, h3 span[class^="sqsrte-text-color"] {
-  font-size: clamp(
-    1.25rem,
-    calc((var(--heading-3-size-value) - 1) * 1.2vw + 1rem),
-    calc(var(--heading-3-size-value) * 1rem)
-  ) !important;
-}
+   The vmax->vw problem is worth solving on the hero H1, where the
+   type is large enough for the difference to matter. For H2/H3 the
+   cost of overriding Squarespace's per-context sizing far outweighs
+   the benefit, so those keep their native sizing. */
 
 
 /* ----------------------------------------------------------

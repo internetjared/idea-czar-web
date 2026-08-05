@@ -252,15 +252,11 @@
   opacity: 1;
 }
 
-/* --- Services hero H1: size multiplier + stroke.
-       (was .sk-preset-8185753453162701 for the stroke.)
-       Both the 0.9 size and the 4px width are superseded further
-       down, where the H1 is matched to the other pages. --- */
-#block-a28e50ebf0b3bc6df216 h1,
-#block-a28e50ebf0b3bc6df216 h1 span[class^='sqsrte-text-color'] {
-  font-size: calc(clamp(0px, calc((var(--heading-1-size-value) - 1) * 1.2vw + 1rem), calc(var(--heading-1-size-value) * 1rem)) * 0.9) !important;
-  -webkit-text-stroke: #F4A825 4px;
-}
+/* --- Services hero H1: SquareKicker's 0.9 size multiplier and 4px
+       stroke lived here, keyed to a block that has since been
+       rebuilt in the editor (new ID). Removed rather than
+       re-pointed: the global H1 scale and the global gold-outline
+       baseline now cover this, and they survive block swaps. --- */
 
 /* --- Services page: beige section backgrounds --- */
 #siteWrapper section[data-section-id="69fa4ac868d01d7b5dfeed24"] .section-background {
@@ -1369,9 +1365,7 @@ section[data-section-id="69a1a9057889be6b0aee15b2"]
    section's bottom edge at every width.
    ============================================================ */
 
-section[data-section-id="6a0345b4ec9a10795c95a66e"]
-  .fe-block-yui_3_17_2_1_1784738134148_3696
-  .fluid-image-animation-wrapper {
+section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) .fluid-image-animation-wrapper {
   align-items: flex-end !important;
 }
 
@@ -1402,14 +1396,9 @@ section[data-section-id="6a0345b4ec9a10795c95a66e"]
    span, which carries its own font-size.
    ============================================================ */
 
-body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df216 h1,
-body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df216 h1 span[class^="sqsrte-text-color"] {
-  font-size: clamp(
-    0px,
-    calc((var(--heading-1-size-value) - 1) * 1.2vw + 1rem),
-    calc(var(--heading-1-size-value) * 1rem)
-  ) !important;
-}
+/* (The per-block size override that used to live here is gone —
+   the block was rebuilt, and the global H1 scale now sets every
+   page to the same size.) */
 
 /* At the full H1 size the word "COMMUNICATION." (~689px) is wider
    than the original text column (~619px), and Squarespace sets
@@ -1418,10 +1407,10 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
    (and pull the image in to match) so the headline breaks on real
    word boundaries. Desktop only; <=1023px already stacks. */
 @media screen and (min-width: 1024px) {
-  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-a28e50ebf0b3bc6df216 {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(h1) {
     grid-column: 2 / 17 !important;
   }
-  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-yui_3_17_2_1_1784738134148_3696 {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) {
     grid-column: 17 / 26 !important;
   }
 }
@@ -1595,9 +1584,7 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #siteWrapper #block-a28e50ebf0b3bc6df21
   #block-yui_3_17_2_1_1772202127116_2470 h1,
   #block-yui_3_17_2_1_1772202127116_2470 h1 span[class^="sqsrte-text-color"],
   #block-yui_3_17_2_1_1775502237673_443 h1,
-  #block-yui_3_17_2_1_1775502237673_443 h1 span[class^="sqsrte-text-color"],
-  #block-a28e50ebf0b3bc6df216 h1,
-  #block-a28e50ebf0b3bc6df216 h1 span[class^="sqsrte-text-color"] {
+  #block-yui_3_17_2_1_1775502237673_443 h1 span[class^="sqsrte-text-color"] {
     -webkit-text-stroke-width: 1px !important;
   }
 }
@@ -1754,8 +1741,8 @@ body.header--menu-open .header-actions-action--cta .btn {
    SquareKicker's own font-size rule on this block.
    ============================================================ */
 
-#siteWrapper #block-a28e50ebf0b3bc6df216 p.sqsrte-large,
-#siteWrapper #block-a28e50ebf0b3bc6df216 p.sqsrte-large span[class^="sqsrte-text-color"] {
+#siteWrapper section[data-section-id="6a0345b4ec9a10795c95a66e"] p.sqsrte-large,
+#siteWrapper section[data-section-id="6a0345b4ec9a10795c95a66e"] p.sqsrte-large span[class^="sqsrte-text-color"] {
   font-size: clamp(18px, 1.9vw, 24px) !important;
   line-height: 1.6 !important;
 }
@@ -1794,8 +1781,9 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #footer-sections {
 /* ============================================================
    SERVICES HERO — STACK IMAGE BELOW TEXT ON NARROW SCREENS
    Section: 6a0345b4ec9a10795c95a66e
-   Blocks:  .fe-block-a28e50ebf0b3bc6df216 (headline + intro)
-            .fe-block-yui_3_17_2_1_1784738134148_3696 (Ken + AI icons)
+   Blocks:  matched by content (:has(h1) / :has(img)) rather than by
+            ID, so rebuilding either block in the editor doesn't
+            silently break these rules.
 
    Squarespace's Fluid Engine only switches to its stacked mobile
    layout at <=767px. Between ~768px and ~1023px the hero stayed
@@ -1812,11 +1800,11 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #footer-sections {
    ============================================================ */
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-a28e50ebf0b3bc6df216 {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(h1) {
     grid-column: 2 / 26 !important;
     grid-row: 2 / 12 !important;
   }
-  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-yui_3_17_2_1_1784738134148_3696 {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) {
     grid-column: 2 / 26 !important;
     grid-row: 12 / 27 !important;
   }
@@ -1889,10 +1877,10 @@ section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
    ============================================================ */
 
 @media screen and (min-width: 1024px) {
-  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-a28e50ebf0b3bc6df216 {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(h1) {
     grid-row: 2 / 13 !important;
   }
-  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fe-block-yui_3_17_2_1_1784738134148_3696 {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) {
     grid-row: 2 / 14 !important;
   }
 }

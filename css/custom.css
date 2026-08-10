@@ -1881,3 +1881,89 @@ section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
     grid-row: 2 / 14 !important;
   }
 }
+
+
+/* ============================================================
+   KEN'S NOTES — 5 Aug "Notes on final delivery"
+   ============================================================ */
+
+/* --- Services hero body copy -> standard body size ------------
+   Ken: "the body copy below the headline is larger than the rest
+   of the body copy on the page... bring it down to standard body
+   copy size (ie same size as the body copy in the other modules)."
+
+   It was rendering 24px against 16px elsewhere. This restates the
+   NORMAL text formula (rather than the Large one the block uses),
+   so it tracks Site Styles instead of being pinned to a number.
+
+   NOTE: this reverses an earlier request to enlarge this copy —
+   Ken's note supersedes it. */
+#siteWrapper section[data-section-id="6a0345b4ec9a10795c95a66e"] p.sqsrte-large,
+#siteWrapper section[data-section-id="6a0345b4ec9a10795c95a66e"] p.sqsrte-large span[class^="sqsrte-text-color"] {
+  font-size: clamp(
+    0px,
+    calc((var(--normal-text-size-value) - 1) * 1.2vw + 1rem),
+    calc(var(--normal-text-size-value) * 1rem)
+  ) !important;
+  line-height: var(--body-font-line-height, 1.6) !important;
+}
+
+/* --- Services hero image flush to the section bottom ----------
+   Ken: "Why is there extra padding at the bottom of the hero
+   module? I thought the hero image was supposed to be flush with
+   the bottom border."
+
+   The section's own padding-bottom was already 0. The gap (99px at
+   1130) came from the image block's grid row ending before the
+   grid did — the taller TEXT block sets the section height, so the
+   image stopped short of the bottom.
+
+   grid-row-end: -1 pins the image block to the last grid line
+   whatever the text does, so it stays flush at any width. */
+@media screen and (min-width: 1024px) {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) {
+    grid-row-end: -1 !important;
+  }
+}
+
+/* --- Trim bottom padding on the service modules ---------------
+   Ken: "This extra bottom padding issue is also present in the
+   other modules as well... this feels like too much."
+   47.5px -> 28px. Kept some so they don't read cramped. */
+section[data-section-id="69fa4ac868d01d7b5dfeed24"] > .content-wrapper,
+section[data-section-id="69fa4eabce683c4c69f957ee"] > .content-wrapper,
+section[data-section-id="69fa4ea2679405554d5f74dd"] > .content-wrapper,
+section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] > .content-wrapper {
+  padding-bottom: 28px !important;
+}
+
+/* --- Module dividers: more visible + one under the hero -------
+   Ken: "I'd like it to be a bit more visible. Also, there's not
+   one at the bottom of the hero module."
+
+   28% -> 45% opacity, and the first service module now carries a
+   top border too, which reads as the hero's bottom border.
+   (The line closing the last module already exists as the footer
+   divider added earlier.) */
+section[data-section-id="69fa4ac868d01d7b5dfeed24"],
+section[data-section-id="69fa4eabce683c4c69f957ee"],
+section[data-section-id="69fa4ea2679405554d5f74dd"],
+section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
+  border-top: 1px solid rgba(32, 29, 32, 0.45) !important;
+}
+
+/* --- Work project pages: pagination colliding with the header --
+   Ken: "There are several Work pages where the side-to-side nav is
+   mushed in with the top nav. Is this because there's no content
+   yet on these pages?"
+
+   Yes. With no content blocks, #sections collapses to 0 height, so
+   the prev/next pagination lands at y=0 — behind the header.
+
+   A min-height floors the content area so the pagination always
+   clears the header. It's inert on populated pages (their content
+   is already taller), so this only affects empty ones — including
+   any new project created before its copy is ready. */
+body.collection-69a1d4c9ddb6a504135dda24.view-item #sections {
+  min-height: 45vh;
+}

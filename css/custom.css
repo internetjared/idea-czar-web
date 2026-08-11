@@ -2122,21 +2122,30 @@ body.collection-69a1d4c9ddb6a504135dda24.view-item #sections {
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) .fluid-image-container {
     height: auto !important;
     aspect-ratio: 2342 / 2500 !important;
-    /* Jared: "I think the image can be reduced in size a bit."
+  }
 
-       Worth knowing which dimension actually drives this, because the
-       obvious levers are all no-ops: the container sits in a flex
-       wrapper (align-items: flex-end, from the flush-bottom rule), so
-       it takes its HEIGHT from the block's grid rows and derives its
-       width from the aspect-ratio above. Narrowing the grid column
-       just slides it right, and max-width does nothing at all — both
-       tested. Height is the only handle.
+  /* Jared: "I think the image can be reduced in size a bit."
 
-       90% trims it ~10% (681 -> 613 tall at 1826) which is the "a bit"
-       asked for; below ~86% the copy starts overhanging the top of the
-       image and the two stop reading as a pair. Bottom-flush is
-       preserved because the wrapper aligns to flex-end, so the space
-       comes off the top. */
-    max-height: 90% !important;
+     Sizing this down is trickier than it looks. The container sits in a
+     flex wrapper (align-items: flex-end, from the flush-bottom rule), so
+     it takes its HEIGHT from the block's grid rows and derives its width
+     from the aspect-ratio above. That rules out the obvious levers:
+     narrowing the grid column only slides it right, and max-width is a
+     no-op — both tested.
+
+     max-height LOOKS right and tests clean in isolation, but shipped it
+     blew the hero up from 850px to 1138px. A percentage max-height needs
+     a definite containing height; here the parent's height depends on
+     its content, so the percentage resolves to none, the aspect-ratio
+     flips the container from height-driven to width-driven, and it
+     inflates to the full column width. Do not reintroduce it.
+
+     A transform sidesteps the whole problem: it is applied after layout,
+     so it cannot feed back into the grid or the section height no matter
+     what the parent is doing. Origin is bottom centre so the artwork
+     keeps its flush-bottom edge and shrinks toward it. */
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) .fluid-image-container {
+    transform: scale(0.9) !important;
+    transform-origin: bottom center !important;
   }
 }

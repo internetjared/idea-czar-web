@@ -2067,3 +2067,60 @@ section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
 body.collection-69a1d4c9ddb6a504135dda24.view-item #sections {
   min-height: 45vh;
 }
+
+
+/* ============================================================
+   SERVICES HERO — VERTICALLY CENTRE THE COPY (desktop)
+   Section: 6a0345b4ec9a10795c95a66e
+
+   Jared: "I want the text to be vertically in the middle not
+   toward the top of the page."
+
+   The copy sat flush with the TOP of the content band while the
+   image ran the full height of it, leaving ~216px of void under
+   the text. (Against the section box it was only ~24px off centre —
+   the section carries ~125px of padding-top and none at the bottom,
+   so section-centre and the visible content band are not the same
+   thing. Centring on the band is what actually reads as centred.)
+
+   Three rules, all load-bearing:
+
+   1. grid-row-end: -1 on the text block so its grid area spans the
+      same band as the image. Without this there is nothing to
+      centre within — the block is exactly as tall as its copy.
+
+   2. justify-content: center on the inner .sqs-block, NOT on the
+      .fe-block. Squarespace already sets .sqs-block to display:flex
+      and it stretches to fill the .fe-block, so centring one level
+      up does nothing — the block absorbs the extra height and the
+      copy stays pinned to the top.
+
+   3. aspect-ratio on the image container. The section's height was
+      previously driven by the TEXT block's row demand; once that
+      block spans the full grid its copy spreads over more rows, the
+      rows shrink, and the section collapses — taking the image with
+      it (886 -> 850, image 717 -> 681). The image can't defend its
+      own height because the <img> is absolutely positioned inside
+      the container and object-fit: contain simply letterboxes. An
+      explicit ratio makes the container demand its natural height
+      and hold the section open.
+
+   Result at 1770px: 108px above the copy, 108px below, image and
+   section height unchanged, image still flush bottom-right.
+
+   NOTE: 2342/2500 is this specific hero image's intrinsic ratio. If
+   the hero artwork is ever swapped, update it to match or the
+   container will letterbox. ============================================================ */
+
+@media screen and (min-width: 1024px) {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(h1) {
+    grid-row-end: -1 !important;
+  }
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(h1) .sqs-block {
+    justify-content: center !important;
+  }
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) .fluid-image-container {
+    height: auto !important;
+    aspect-ratio: 2342 / 2500 !important;
+  }
+}

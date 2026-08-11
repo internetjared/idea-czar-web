@@ -1420,13 +1420,21 @@ section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:ha
      2/13  text 551  image 654   H1 5 lines   <- headline grows a line
 
    14 is the last split that keeps the headline at four lines while
-   giving the image equal width. Desktop only; <=1023px already stacks. */
+   giving the image equal width.
+
+   The image then runs to 27 rather than 26 so it bleeds to the right
+   edge of the viewport. That is exactly what the HOME hero does — it is
+   placed 2/14 + 14/27 in the editor — so the two heroes now share the
+   same geometry: 642px text column, 715px image, flush right and flush
+   bottom. Ken asked for the Services hero to sit closer in balance to
+   the home page hero; this makes them identical rather than merely
+   similar. Desktop only; <=1023px already stacks. */
 @media screen and (min-width: 1024px) {
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(h1) {
     grid-column: 2 / 14 !important;
   }
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) {
-    grid-column: 14 / 26 !important;
+    grid-column: 14 / 27 !important;
   }
 }
 

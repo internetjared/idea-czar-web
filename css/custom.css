@@ -1397,18 +1397,36 @@ section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:ha
    the block was rebuilt, and the global H1 scale now sets every
    page to the same size.) */
 
-/* At the full H1 size the word "COMMUNICATION." (~689px) is wider
-   than the original text column (~619px), and Squarespace sets
-   overflow-wrap: break-word on headings — so it split mid-word as
-   "COMMUNICATIO / N.". Widen the text column by two grid columns
-   (and pull the image in to match) so the headline breaks on real
-   word boundaries. Desktop only; <=1023px already stacks. */
+/* Desktop column split for the hero.
+
+   Originally 2/17 + 17/26: the old headline ended in the single word
+   "COMMUNICATION." (~689px), wider than the stock text column, and
+   Squarespace sets overflow-wrap: break-word on headings — so it split
+   mid-word as "COMMUNICATIO / N.". The text column was widened to stop
+   that.
+
+   Ken's shorter headline ("Ideas and messages that elevate your brand")
+   removed that constraint and left the split badly lopsided: text 756px
+   vs image 449px, with ~186px of dead space under the copy while the
+   image sat small in a much taller block.
+
+   The image container is width-driven (natural 449x479, aspect 0.937),
+   so widening its column genuinely grows the image rather than
+   letterboxing it. Measured at 1351px:
+
+     2/17  text 756  image 449   H1 4 lines   <- lopsided
+     2/15  text 654  image 551   H1 4 lines
+     2/14  text 602  image 602   H1 4 lines   <- balanced, chosen
+     2/13  text 551  image 654   H1 5 lines   <- headline grows a line
+
+   14 is the last split that keeps the headline at four lines while
+   giving the image equal width. Desktop only; <=1023px already stacks. */
 @media screen and (min-width: 1024px) {
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(h1) {
-    grid-column: 2 / 17 !important;
+    grid-column: 2 / 14 !important;
   }
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) {
-    grid-column: 17 / 26 !important;
+    grid-column: 14 / 26 !important;
   }
 }
 
@@ -1546,6 +1564,31 @@ section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:ha
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+/* Lift the whole SECTION while the tooltip is open.
+
+   Ken originally liked that the balloon passed *under* the image in the
+   next module. That only read well while the modules had a large gap
+   below the trigger — once the gap was trimmed the balloon landed on top
+   of the next section's artwork and the text became unreadable.
+
+   Raising z-index on .fe-block / .sqs-block / .sqs-html-content does not
+   fix it: .sqs-html-content is `position: relative; z-index: 0`, which
+   opens a stacking context that traps the tooltip's z-index: 20 inside
+   the block. The next section then paints above it regardless.
+
+   Promoting the whole page-section for the duration of the hover is the
+   only lever that clears the following section. Scoped to the open state
+   so normal stacking is untouched the rest of the time.
+
+   TRADEOFF: the balloon now paints OVER the next module's image rather
+   than under it. Legibility beat the effect. */
+section.page-section:has(.ic-ai-tip:hover),
+section.page-section:has(.ic-ai-tip:focus-within),
+section.page-section:has(.ic-ai-tip.is-open) {
+  position: relative !important;
+  z-index: 500 !important;
 }
 
 /* Respect reduced-motion: no pulse, no transform jump */

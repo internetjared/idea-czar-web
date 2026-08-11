@@ -1728,21 +1728,15 @@ body.header--menu-open .header-actions-action--cta .btn {
 
 
 /* ============================================================
-   SERVICES PAGE — LARGER HERO INTRO COPY
-   Page:  body.collection-69a1d51a8fb73a5aab6db6c6 (Services)
-   Block: #block-a28e50ebf0b3bc6df216 (hero H1 + intro paragraphs)
+   SERVICES PAGE — HERO INTRO COPY
+   REMOVED. This block used to enlarge the hero intro to
+   clamp(18px, 1.9vw, 24px). Ken flagged it as bigger than the rest
+   of the page's body copy, and he was right.
 
-   The intro copy under the headline was ~20px, small relative to
-   the hero. Bumped up with a responsive clamp so it still scales
-   down on mobile. #siteWrapper prefix is needed to out-specify
-   SquareKicker's own font-size rule on this block.
+   The hero intro and the module body copy are both Squarespace
+   "Large" paragraphs, so with NO rule here they match exactly at
+   every width. See the matching note further down.
    ============================================================ */
-
-#siteWrapper section[data-section-id="6a0345b4ec9a10795c95a66e"] p.sqsrte-large,
-#siteWrapper section[data-section-id="6a0345b4ec9a10795c95a66e"] p.sqsrte-large span[class^="sqsrte-text-color"] {
-  font-size: clamp(18px, 1.9vw, 24px) !important;
-  line-height: 1.6 !important;
-}
 
 
 /* ============================================================

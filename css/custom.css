@@ -1852,6 +1852,40 @@ body.collection-69a1d51a8fb73a5aab6db6c6 #footer-sections {
   }
 }
 
+/* --- Phone: close the gap between the copy and the image -------
+   Below 768px Squarespace uses its own mobile grid (30 rows), and the
+   image block was drawn at rows 14/30 — leaving a 229px void between
+   the last line of copy and the artwork, which pushed the image almost
+   entirely below the fold.
+
+   Two things had to move together:
+
+   1. The image is pinned to the BOTTOM of its block (by the flush rule
+      further up this file), so changing its START row does nothing —
+      only the END row moves it. 26 lifts it as far as it goes before
+      the block gets shorter than the image and the section starts
+      growing again (tested 18/20/22/24/26: 24 and below inflate the
+      section height).
+   2. That leaves the freed space at the bottom instead. Squarespace
+      sets grid-template-rows explicitly, so the empty rows do not
+      collapse — a negative margin is the only lever that reaches them
+      (same technique as the service modules below).
+
+   -160 rather than -175 keeps ~15px of breath under the image instead
+   of butting it against the next section's border.
+
+   Measured: hero 1215 -> 1055, copy/image gap 229 -> 89 at 390px.
+   Verified at 375 / 390 / 430 / 767: gap 52-103, 15px bottom gap
+   throughout, no overlap into the next section, no horizontal scroll. */
+@media screen and (max-width: 767px) {
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) {
+    grid-row: 14 / 26 !important;
+  }
+  section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine {
+    margin-bottom: -160px !important;
+  }
+}
+
 
 /* ============================================================
    SERVICES PAGE — SEPARATORS BETWEEN SERVICE SECTIONS

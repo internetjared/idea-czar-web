@@ -2122,5 +2122,21 @@ body.collection-69a1d4c9ddb6a504135dda24.view-item #sections {
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) .fluid-image-container {
     height: auto !important;
     aspect-ratio: 2342 / 2500 !important;
+    /* Jared: "I think the image can be reduced in size a bit."
+
+       Worth knowing which dimension actually drives this, because the
+       obvious levers are all no-ops: the container sits in a flex
+       wrapper (align-items: flex-end, from the flush-bottom rule), so
+       it takes its HEIGHT from the block's grid rows and derives its
+       width from the aspect-ratio above. Narrowing the grid column
+       just slides it right, and max-width does nothing at all — both
+       tested. Height is the only handle.
+
+       90% trims it ~10% (681 -> 613 tall at 1826) which is the "a bit"
+       asked for; below ~86% the copy starts overhanging the top of the
+       image and the two stop reading as a pair. Bottom-flush is
+       preserved because the wrapper aligns to flex-end, so the space
+       comes off the top. */
+    max-height: 90% !important;
   }
 }

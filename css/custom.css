@@ -1898,15 +1898,15 @@ section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] {
 
    NOTE: this reverses an earlier request to enlarge this copy —
    Ken's note supersedes it. */
-#siteWrapper section[data-section-id="6a0345b4ec9a10795c95a66e"] p.sqsrte-large,
-#siteWrapper section[data-section-id="6a0345b4ec9a10795c95a66e"] p.sqsrte-large span[class^="sqsrte-text-color"] {
-  font-size: clamp(
-    0px,
-    calc((var(--normal-text-size-value) - 1) * 1.2vw + 1rem),
-    calc(var(--normal-text-size-value) * 1rem)
-  ) !important;
-  line-height: var(--body-font-line-height, 1.6) !important;
-}
+/* (No rule here on purpose.) The hero intro and the module body copy are
+   BOTH Squarespace "Large" paragraphs, so with no override they match
+   exactly at every width — nothing to keep in sync.
+
+   History worth keeping: this was first enlarged to 24px on request, which
+   Ken flagged as too big. I then "matched the other modules" at 16px — but
+   I'd measured the wrong paragraph (the hidden "I use AI…" blurb, 16px)
+   rather than the visible module copy (20.3px), so it came out too small
+   and Ken flagged it again. Deleting the override is the actual fix. */
 
 /* --- Services hero image flush to the section bottom ----------
    Ken: "Why is there extra padding at the bottom of the hero
@@ -1934,7 +1934,28 @@ section[data-section-id="69fa4ac868d01d7b5dfeed24"] > .content-wrapper,
 section[data-section-id="69fa4eabce683c4c69f957ee"] > .content-wrapper,
 section[data-section-id="69fa4ea2679405554d5f74dd"] > .content-wrapper,
 section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] > .content-wrapper {
-  padding-bottom: 28px !important;
+  padding-bottom: 16px !important;
+}
+
+/* The padding was only ever HALF the gap. Each module also carries empty
+   Fluid Engine rows below its last block — 34/42/58/42px across the four —
+   because of how tall the sections were drawn in the editor. That row space
+   is set by Squarespace's explicit grid-template-rows and does NOT respond
+   to height:fit-content, align-content, or shrinking the blocks (all tested,
+   all no-ops). A negative margin is the only CSS lever that reaches it.
+
+   -30px is deliberately under the smallest module's 34px of slack, so no
+   module clips. Verified: no content overflows in any of the four.
+
+   Caveat: if a module later gains a line of copy or a bullet, its slack
+   shrinks and this could start to crowd. The clean permanent fix is to drag
+   each section's bottom edge up in the Fluid Engine editor, which removes
+   the empty rows properly — then this rule can be deleted. */
+section[data-section-id="69fa4ac868d01d7b5dfeed24"] .fluid-engine,
+section[data-section-id="69fa4eabce683c4c69f957ee"] .fluid-engine,
+section[data-section-id="69fa4ea2679405554d5f74dd"] .fluid-engine,
+section[data-section-id="69fa4e7770cb4b6b6fbe1f7c"] .fluid-engine {
+  margin-bottom: -30px !important;
 }
 
 /* --- Module dividers: more visible + one under the hero -------

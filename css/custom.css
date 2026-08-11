@@ -2119,31 +2119,41 @@ body.collection-69a1d4c9ddb6a504135dda24.view-item #sections {
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(h1) .sqs-block {
     justify-content: center !important;
   }
+  /* The container fills its block and the <img> letterboxes inside it
+     via object-fit: contain, so the visible artwork is height-driven off
+     the grid rows. height: 100% overrides the explicit pixel height
+     Squarespace sets inline, which is sized for the original (much
+     smaller) placement.
+
+     An aspect-ratio was tried here to stop the section collapsing when
+     the text block spans to -1. It tested clean but shipped badly: the
+     container flipped from height-driven to width-driven and inflated
+     the hero from 850px to 1138px. It also turned out to be unnecessary
+     — the section holds 850px without it. Do not reintroduce it, and be
+     wary of aspect-ratio on this container generally: the responsive
+     srcset means the container's width can change the image variant that
+     loads, which changes the natural size, which feeds back into layout. */
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) .fluid-image-container {
-    height: auto !important;
-    aspect-ratio: 2342 / 2500 !important;
+    height: 100% !important;
   }
 
   /* Jared: "I think the image can be reduced in size a bit."
 
-     Sizing this down is trickier than it looks. The container sits in a
-     flex wrapper (align-items: flex-end, from the flush-bottom rule), so
-     it takes its HEIGHT from the block's grid rows and derives its width
-     from the aspect-ratio above. That rules out the obvious levers:
-     narrowing the grid column only slides it right, and max-width is a
-     no-op — both tested.
+     Scaling this down is trickier than it looks. The container sits in a
+     flex wrapper (align-items: flex-end, from the flush-bottom rule) and
+     takes its height from the grid rows, so the obvious levers are all
+     no-ops: narrowing the grid column only slides it right, max-width
+     does nothing, and max-height needs a definite containing height it
+     does not have. All three tested.
 
-     max-height LOOKS right and tests clean in isolation, but shipped it
-     blew the hero up from 850px to 1138px. A percentage max-height needs
-     a definite containing height; here the parent's height depends on
-     its content, so the percentage resolves to none, the aspect-ratio
-     flips the container from height-driven to width-driven, and it
-     inflates to the full column width. Do not reintroduce it.
+     A transform sidesteps the problem entirely — it applies after layout,
+     so it cannot feed back into the grid or the section height. Origin is
+     bottom centre so the artwork keeps its flush-bottom edge and shrinks
+     toward it.
 
-     A transform sidesteps the whole problem: it is applied after layout,
-     so it cannot feed back into the grid or the section height no matter
-     what the parent is doing. Origin is bottom centre so the artwork
-     keeps its flush-bottom edge and shrinks toward it. */
+     0.9 takes the visible artwork from 639x681 to 575x613 at 1826px.
+     Below ~0.87 the copy starts overhanging the top of the image and the
+     two stop reading as a pair. */
   section[data-section-id="6a0345b4ec9a10795c95a66e"] .fluid-engine > .fe-block:has(img) .fluid-image-container {
     transform: scale(0.9) !important;
     transform-origin: bottom center !important;

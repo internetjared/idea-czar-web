@@ -2159,3 +2159,53 @@ body.collection-69a1d4c9ddb6a504135dda24.view-item #sections {
     transform-origin: bottom center !important;
   }
 }
+
+
+/* ============================================================
+   KEN'S NOTES — 11 Aug
+   ============================================================ */
+
+/* --- Remove the italic from the Services headline -------------
+   Ken: "please remove the italics treatment from the Services
+   headline."
+
+   This is content markup, not styling: the headline is wrapped in
+   <em> in the editor. Molot has no true italic, so the browser
+   synthesises an oblique by skewing the upright — which is why it
+   reads as a slant rather than a designed italic.
+
+   The tidiest fix is to drop the <em> in the Squarespace editor
+   (select the headline, toggle italic off) — this rule only masks
+   it. Keeping the rule anyway so the headline stays upright if the
+   markup comes back on a future copy paste.
+
+   Scoped to the hero section: <em> elsewhere still italicises. */
+section[data-section-id="6a0345b4ec9a10795c95a66e"] h1 em,
+section[data-section-id="6a0345b4ec9a10795c95a66e"] h1 i {
+  font-style: normal !important;
+}
+
+/* --- Work items: white bar behind the pagination on empty pages
+   Ken: "the pages that don't have content have that white bar
+   behind the bottom nav links, but the ones that currently have
+   content don't."
+
+   Squarespace tints the pagination band from the colour theme of
+   the LAST section on the page. A project with content ends in a
+   cream section, so the band inherits cream (#F5F0E5). A project
+   with no sections yet has nothing to inherit from, so it falls
+   back to the default white theme.
+
+   So this resolves itself as Ken fills the pages in — but until
+   then the empty ones look broken. This paints the band cream in
+   exactly that case.
+
+   #sections:not(:has(*)) matches only when the article has no
+   element children, which is true only on a project with no
+   sections. :empty would NOT work here — the article contains
+   whitespace text nodes. The rule stops applying by itself the
+   moment a section is added, so it needs no cleanup later and
+   cannot fight a theme Ken chooses for real content. */
+#sections:not(:has(*)) ~ .item-pagination {
+  background-color: #F5F0E5 !important;
+}

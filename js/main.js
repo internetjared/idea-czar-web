@@ -256,11 +256,27 @@
           CATEGORIES: Copy, Brand Voice
           TAGLINE: A short one-line description shown on hover.
         Categories drive filtering on /work (case-insensitive,
-        comma-separated, any combo of:
-          Brand Voice, Brand Guidelines, Copy, Content, B2B, Fun).
-        Tagline (optional) shows under the project title in the
-        hover overlay on /work.
+        comma-separated). Tagline (optional) shows under the project
+        title in the hover overlay on /work.
      4. Save
+
+   CATEGORIES ARE SELF-SERVE — no code change needed to add one.
+   The filter pills are built from the categories actually found
+   across the project pages, so typing a brand-new category name on
+   any project makes its pill appear on /work automatically.
+
+   CATEGORY_ORDER below only fixes the DISPLAY ORDER of the names we
+   already know about. Anything Ken invents is appended after those,
+   alphabetically. A category is only shown once at least one project
+   uses it, so the filter never offers a pill that returns nothing.
+
+   Two consequences worth knowing:
+     - A typo ("Brnad Voice") becomes its own pill. That is visible
+       rather than silent, which is the point: the old fixed list
+       swallowed unknown categories without any signal.
+     - Pills render after the project pages are fetched, so on a cold
+       load the sidebar is briefly empty. The sidebar is a fixed
+       240px column, so nothing reflows around it when they land.
      → Visitors never see these lines on the project page itself —
        the script auto-hides any block starting with CATEGORIES: or
        TAGLINE:. On /work, the script fetches each project page in
@@ -276,9 +292,12 @@
 
 (function () {
   var SECTION_ID  = '69a1d4ceddb6a504135dda80';
-  var CATEGORIES  = ['Brand Voice', 'Brand Guidelines', 'Copy', 'Content', 'B2B', 'Fun'];
+  /* Preferred display order only — NOT an allow-list. Categories not
+     named here still get pills; they sort in alphabetically after
+     these. Names here that no project uses are not rendered. */
+  var CATEGORY_ORDER = ['Brand Voice', 'Brand Guidelines', 'Copy', 'Content', 'B2B', 'Fun'];
   var CACHE_TTL_MS = 10 * 60 * 1000;  /* 10 minutes */
-  var CACHE_VERSION = 2;  /* bump whenever extractMeta() changes — old
+  var CACHE_VERSION = 3;  /* bump whenever extractMeta() changes — old
                              entries with a lower version are ignored
                              and refetched, so users never get stuck on
                              cached output from a buggy parser */
@@ -304,7 +323,10 @@
      paragraphs into one string, which makes the CATEGORIES line
      greedily swallow the following TAGLINE line. */
   function extractMeta(html) {
-    var meta = { cats: [], tagline: '' };
+    /* cats   = lowercased, used for matching
+       labels = same list as Ken typed it, used for the pill text so
+                his capitalisation is what shows on screen */
+    var meta = { cats: [], labels: [], tagline: '' };
     if (!html) return meta;
 
     var doc;
@@ -319,9 +341,11 @@
 
       var catMatch = txt.match(/^CATEGORIES?\s*:\s*(.+?)\s*$/i);
       if (catMatch && !meta.cats.length) {
-        meta.cats = catMatch[1].split(',').map(function (c) {
-          return c.trim().toLowerCase();
+        var raw = catMatch[1].split(',').map(function (c) {
+          return c.trim();
         }).filter(Boolean);
+        meta.labels = raw;
+        meta.cats = raw.map(function (c) { return c.toLowerCase(); });
         continue;
       }
 
@@ -374,16 +398,53 @@
     } catch (e) {}
   })();
 
-  /* --- Filter-sidebar builder --- */
+  /* --- Filter-sidebar shell (pills are filled in after the fetch) --- */
   function buildFilterUI() {
     var wrap = document.createElement('aside');
     wrap.className = 'ic-portfolio-filter';
+    wrap.innerHTML =
+      '<div class="ic-filter-label">Filter</div>' +
+      '<div class="ic-filter-list"></div>' +
+      '<button type="button" class="ic-filter-clear">Clear all</button>';
+    return wrap;
+  }
 
-    var html = '<div class="ic-filter-label">Filter</div><div class="ic-filter-list">';
-    CATEGORIES.forEach(function (cat) {
+  /* --- Order the categories found across the project pages ---
+     Known names first, in CATEGORY_ORDER; anything new Ken invented
+     after them, alphabetically. Only categories actually in use are
+     returned, so no pill can ever come back empty. */
+  function orderCategories(found) {
+    var known = [], extra = [];
+    CATEGORY_ORDER.forEach(function (name) {
+      var key = name.toLowerCase();
+      if (found[key]) known.push({ key: key, label: name });
+    });
+    Object.keys(found).forEach(function (key) {
+      var isKnown = CATEGORY_ORDER.some(function (n) {
+        return n.toLowerCase() === key;
+      });
+      if (!isKnown) extra.push({ key: key, label: found[key] });
+    });
+    extra.sort(function (a, b) { return a.label.localeCompare(b.label); });
+    return known.concat(extra);
+  }
+
+  function renderPills(filter, cats) {
+    var list = filter.querySelector('.ic-filter-list');
+    if (!list) return;
+
+    /* Nothing tagged yet (or every fetch failed) — hide the sidebar
+       rather than leaving a bare "Filter" heading with no controls. */
+    if (!cats.length) {
+      filter.classList.add('is-empty');
+      return;
+    }
+
+    var html = '';
+    cats.forEach(function (cat) {
       html +=
-        '<button type="button" class="ic-filter-pill" data-cat="' + cat.toLowerCase() + '">' +
-          '<span class="ic-filter-text">' + cat + '</span>' +
+        '<button type="button" class="ic-filter-pill" data-cat="' + cat.key + '">' +
+          '<span class="ic-filter-text"></span>' +
           '<span class="ic-filter-icon" aria-hidden="true">' +
             '<svg viewBox="0 0 12 12" width="13" height="13" fill="none">' +
               '<path d="M6 1V11" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>' +
@@ -392,10 +453,15 @@
           '</span>' +
         '</button>';
     });
-    html += '</div>';
-    html += '<button type="button" class="ic-filter-clear">Clear all</button>';
-    wrap.innerHTML = html;
-    return wrap;
+    list.innerHTML = html;
+    /* Label set via textContent, never interpolated into the HTML
+       string above — the text comes from a project page, so treat it
+       as untrusted and let the DOM escape it. */
+    var nodes = list.querySelectorAll('.ic-filter-pill .ic-filter-text');
+    cats.forEach(function (cat, i) {
+      if (nodes[i]) nodes[i].textContent = cat.label;
+    });
+    filter.classList.add('is-ready');
   }
 
   /* --- Main init --- */
@@ -415,15 +481,27 @@
     var filter = buildFilterUI();
     grid.parentElement.insertBefore(filter, grid);
 
-    var pills = filter.querySelectorAll('.ic-filter-pill');
+    /* Empty until the fetches land and renderPills() runs. Declared
+       with var so the click handler and applyFilter() below close over
+       the same binding and see the reassignment. */
+    var pills = [];
 
     /* Fetch each project page in parallel, parse CATEGORIES + TAGLINE,
-       tag grid items, and inject the tagline into the hover overlay */
+       tag grid items, and inject the tagline into the hover overlay.
+       Collect every category seen along the way so the pills can be
+       built from real content rather than a hard-coded list. */
+    var found = {};   /* lowercase key -> label as first typed */
     var slides = Array.prototype.slice.call(grid.querySelectorAll('.grid-item'));
     Promise.all(slides.map(function (link) {
       var href = link.getAttribute('href') || '';
       return fetchProjectMeta(href).then(function (meta) {
         link.dataset.icCats = meta.cats.join('|');
+
+        meta.cats.forEach(function (key, i) {
+          if (!found[key]) {
+            found[key] = (meta.labels && meta.labels[i]) || key;
+          }
+        });
 
         if (meta.tagline) {
           var textWrap = link.querySelector('.portfolio-text');
@@ -435,7 +513,10 @@
           }
         }
       });
-    }));
+    })).then(function () {
+      renderPills(filter, orderCategories(found));
+      pills = filter.querySelectorAll('.ic-filter-pill');
+    });
 
     /* --- 5. Filter click handler --- */
     function applyFilter() {

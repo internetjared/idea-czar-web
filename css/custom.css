@@ -814,6 +814,21 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .portfolio-grid-overlay {
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
+  /* Pills are built from the categories found across the project
+     pages, so they land after those fetches resolve. Fade them in
+     rather than letting them pop. The sidebar is a fixed 240px
+     column, so nothing reflows around them. */
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.ic-portfolio-filter.is-ready .ic-filter-list { opacity: 1; }
+
+/* No project carries a category yet — hide the whole sidebar instead
+   of showing a "Filter" heading with nothing under it. */
+.ic-portfolio-filter.is-empty { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ic-filter-list { transition: none; }
 }
 
 /* ---------------- Filter pill ---------------- */

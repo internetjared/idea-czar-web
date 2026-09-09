@@ -1246,20 +1246,30 @@ section[data-section-id="69a1d4ceddb6a504135dda80"] .grid-item:hover .portfolio-
 
 
 /* ============================================================
-   ABOUT PAGE — ACCORDION "READ MORE" CONTROL
-   Page:  body.collection-69a1d4bf3444676a65fe5bb5 (About)
+   ACCORDION "READ MORE" CONTROL
+   Pages: About (collection-69a1d4bf3444676a65fe5bb5)
+          Work project pages (collection-69a1d4c9ddb6a504135dda24,
+                              item view only)
    Block: .sqs-block-accordion
 
    Converts the default accordion (title + right-side down arrow)
    into: the first paragraph, with a "Read More" / "Read Less"
    text control sitting BELOW it instead of an arrow.
 
-   Scoped to the About page collection so other accordions
-   elsewhere on the site keep their native behavior.
+   Originally About-only. Extended to Work project pages after Ken
+   deleted the accordion from a project page and asked to restore it:
+   rebuilding it there would have silently come back with the native
+   down-arrow, because this styling never reached that collection.
+   Now any accordion he adds to a project page picks up the Read More
+   treatment on its own, with no code change per page.
+
+   Still scoped rather than global so accordions anywhere else on the
+   site keep their native behaviour. :is() keeps the two collections
+   on one selector instead of duplicating every rule below.
    ============================================================ */
 
 /* Stack the title over the control instead of title | arrow */
-body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__click-target {
+body:is(.collection-69a1d4bf3444676a65fe5bb5, .collection-69a1d4c9ddb6a504135dda24.view-item) .sqs-block-accordion .accordion-item__click-target {
   flex-direction: column !important;
   align-items: flex-start !important;
   justify-content: flex-start !important;
@@ -1267,13 +1277,13 @@ body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__c
 }
 
 /* Hide the native arrow graphic */
-body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-icon-container .arrow-container {
+body:is(.collection-69a1d4bf3444676a65fe5bb5, .collection-69a1d4c9ddb6a504135dda24.view-item) .sqs-block-accordion .accordion-icon-container .arrow-container {
   display: none !important;
 }
 
 /* Repurpose the (now empty) icon container as the text control.
    Reset its fixed 14x14 sizing so the label can size to its text. */
-body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-icon-container {
+body:is(.collection-69a1d4bf3444676a65fe5bb5, .collection-69a1d4c9ddb6a504135dda24.view-item) .sqs-block-accordion .accordion-icon-container {
   width: auto !important;
   height: auto !important;
   margin: 0 !important;
@@ -1281,7 +1291,7 @@ body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-icon-co
 }
 
 /* The "Read More" / "Read Less" label */
-body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-icon-container::after {
+body:is(.collection-69a1d4bf3444676a65fe5bb5, .collection-69a1d4c9ddb6a504135dda24.view-item) .sqs-block-accordion .accordion-icon-container::after {
   content: 'Read More';
   display: inline-block;
   font-family: 'Fyodor', sans-serif;
@@ -1297,13 +1307,13 @@ body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-icon-co
 }
 
 /* Swap label text when the item is open */
-body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__click-target[aria-expanded="true"] .accordion-icon-container::after {
+body:is(.collection-69a1d4bf3444676a65fe5bb5, .collection-69a1d4c9ddb6a504135dda24.view-item) .sqs-block-accordion .accordion-item__click-target[aria-expanded="true"] .accordion-icon-container::after {
   content: 'Read Less';
 }
 
 /* Hover — gold text to reinforce it's a control */
-body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__click-target:hover .accordion-icon-container::after,
-body.collection-69a1d4bf3444676a65fe5bb5 .sqs-block-accordion .accordion-item__click-target:focus-visible .accordion-icon-container::after {
+body:is(.collection-69a1d4bf3444676a65fe5bb5, .collection-69a1d4c9ddb6a504135dda24.view-item) .sqs-block-accordion .accordion-item__click-target:hover .accordion-icon-container::after,
+body:is(.collection-69a1d4bf3444676a65fe5bb5, .collection-69a1d4c9ddb6a504135dda24.view-item) .sqs-block-accordion .accordion-item__click-target:focus-visible .accordion-icon-container::after {
   color: #F4A825;
 }
 
@@ -2223,4 +2233,83 @@ section[data-section-id="6a0345b4ec9a10795c95a66e"] h1 i {
    cannot fight a theme Ken chooses for real content. */
 #sections:not(:has(*)) ~ .item-pagination {
   background-color: #F5F0E5 !important;
+}
+
+
+/* ============================================================
+   KEN'S NOTES — 4 Sep (found while building out Work pages)
+   ============================================================ */
+
+/* --- Project title: gold outline regardless of heading level ---
+   Ken: "when I selected the entire headline and pasted in new
+   headline copy, it removed the orange outline around the headline."
+
+   The paste didn't strip styling — it changed the heading LEVEL.
+   Pasting over a fully-selected heading makes Squarespace re-type the
+   block, and these pages ended up with the project title as an H2:
+
+     H1 title: flo-website, skype-bicymple, feed-the-lobster
+     H2 title: david-bowie, lumosity-mindfulness-launch
+
+   The gold outline and the H1 size scale are both keyed to h1, so an
+   H2 title silently lost the outline AND rendered ~20% smaller
+   (59.2px vs 71.3px at 1200).
+
+   Rather than ask Ken to police heading levels while authoring, make
+   the level not matter: on Work project pages an H2 gets the same
+   size and stroke as an H1. Safe to do here because H2 is only ever
+   the project title on these pages — the red kicker above it is H3
+   and accordion titles are H4 (verified across all six built pages).
+
+   Setting the title back to Heading 1 in the editor is still the
+   tidier fix; this just means the page never LOOKS broken if he
+   doesn't. */
+body.collection-69a1d4c9ddb6a504135dda24.view-item #sections h2,
+body.collection-69a1d4c9ddb6a504135dda24.view-item #sections h2 span[class^="sqsrte-text-color"] {
+  font-size: clamp(
+    2rem,
+    calc(((var(--heading-1-size-value) - 1) * 1.2vw + 1rem) * 0.95),
+    calc(var(--heading-1-size-value) * 1rem * 0.95)
+  ) !important;
+  -webkit-text-stroke: 3px #F4A825;
+}
+
+/* Match the mobile thinning applied to h1 — a fixed 3px outline fills
+   in the letterforms once the type shrinks. */
+@media screen and (max-width: 767px) {
+  body.collection-69a1d4c9ddb6a504135dda24.view-item #sections h2,
+  body.collection-69a1d4c9ddb6a504135dda24.view-item #sections h2 span[class^="sqsrte-text-color"] {
+    -webkit-text-stroke-width: 1px;
+  }
+}
+
+/* --- Close the gap between the copy and the imagery -----------
+   Ken: "there's a bit too much space between the copy and the
+   imagery. Is there a way to close that distance?"
+
+   Measured 100px on lumosity-mindfulness-launch at 1200px, and it
+   came from two separate places rather than one:
+
+     40px  bottom padding on the copy section's .content-wrapper
+     60px  padding-top that Squarespace puts on .gallery-masonry
+     ----
+     100px
+
+   Trimming both lands at 44px, which keeps the copy and the imagery
+   reading as one unit without them touching.
+
+   The section rule deliberately excludes the LAST section, so this
+   only tightens the seam BETWEEN stacked sections and never eats the
+   breathing room above the prev/next pagination bar.
+
+   Both numbers are also editor sliders (section padding, and the
+   gallery's own Spacing control), so these act as the site-wide
+   default rather than a lock — say the word if a specific page wants
+   more air and I'll scope an exception. */
+body.collection-69a1d4c9ddb6a504135dda24.view-item #sections section:not(:last-of-type) > .content-wrapper {
+  padding-bottom: 20px !important;
+}
+
+body.collection-69a1d4c9ddb6a504135dda24.view-item #sections .gallery-masonry {
+  padding-top: 24px !important;
 }

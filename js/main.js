@@ -775,3 +775,38 @@
   }
   window.addEventListener('mercury:load', initAITooltips);
 })();
+
+
+/* ============================================================
+   6. FOOTER COPYRIGHT YEAR
+
+   The footer Code Block renders "© <span id="ic-footer-year"></span>
+   Idea Czar. All Rights Reserved." and originally relied on a small
+   <script> inside that same Code Block to fill the span.
+
+   That script isn't running: Squarespace suppresses embedded scripts
+   in Code Blocks while you're logged in and editing, and it didn't
+   survive into the saved block either. The span was rendering empty,
+   so the live footer read "© Idea Czar. All Rights Reserved." with no
+   year at all.
+
+   Filling it from here instead. main.js is loaded site-wide and isn't
+   subject to the Code Block script restriction, so the year can't go
+   missing again if the footer block is ever re-pasted or edited.
+   ============================================================ */
+
+(function () {
+  function setFooterYear() {
+    var el = document.getElementById('ic-footer-year');
+    if (!el) return;
+    el.textContent = new Date().getFullYear();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setFooterYear);
+  } else {
+    setFooterYear();
+  }
+  /* Re-run after Squarespace Mercury Ajax page transitions */
+  window.addEventListener('mercury:load', setFooterYear);
+})();
